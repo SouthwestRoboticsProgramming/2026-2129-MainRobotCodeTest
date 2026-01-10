@@ -23,6 +23,7 @@ public final class IOAllocation {
         public static final CanId kPDP = new CanId(62, kRIO);
 
         public static final CanId kShooterMotor = new CanId(67, kGerald);
+        public static final CanId kIndexerMotor = new CanId(41, kGerald);
     }
 
     public static final class RIO {

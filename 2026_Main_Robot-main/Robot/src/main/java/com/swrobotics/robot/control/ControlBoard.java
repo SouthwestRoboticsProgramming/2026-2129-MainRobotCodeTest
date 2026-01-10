@@ -16,6 +16,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -84,6 +85,10 @@ public final class ControlBoard extends SubsystemBase {
                                 && DriverStation.getMatchTime() > 0
                                 && DriverStation.getMatchTime() <= Constants.kEndgameAlert2Time)
                 .onTrue(RumblePatternCommands.endgameAlertFinalCountdown(driver, 0.75));
+                
+
+        new Trigger(() -> robot.indexer.hasPiece()).onTrue(RumblePatternCommands.rumbleForTimeCommand(driver, RumbleType.kBothRumble, 1.0, 0.5)
+                .alongWith(RumblePatternCommands.rumbleForTimeCommand(operator, RumbleType.kBothRumble, 1.0, 0.5)));
     }
 
     private Translation2d getDesiredDriveTranslation() {

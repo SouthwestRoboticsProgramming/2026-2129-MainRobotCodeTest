@@ -18,6 +18,9 @@ public final class FieldInfo {
     /** Information for the 2025 Reefscape field */
     public static final FieldInfo REEFSCAPE_2025 =
             new FieldInfo(17.548, 8.052, FieldSymmetry.ROTATIONAL);
+    /**Information for the 2026 Rebuilt field */
+    public static final FieldInfo REBUILT_2026 =
+            new FieldInfo(16.541, 8.211, FieldSymmetry.LATERAL); //TODO: //update when field dimensions are released
 
     public static DriverStation.Alliance getAlliance() {
         return DriverStation.getAlliance().orElse(null);

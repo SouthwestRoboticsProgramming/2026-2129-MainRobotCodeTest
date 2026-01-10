@@ -213,6 +213,11 @@ public final class Constants {
 
     // Motor tracking
     public static final double kOverheatingThreshold = 75; // Celsius
+    
+
+    /* --- Indexer --- */
+    public static final NTEntry<Double> kIndexerShootVoltage = new NTDouble("Indexer/Shoot Voltage", 10.0).setPersistent();
+    public static final NTEntry<Double> kIndexerIdleVoltage = new NTDouble("Indexer/Idle Voltage", 2.0).setPersistent();
 
     // This must be at the bottom of the file so it happens last
     static {

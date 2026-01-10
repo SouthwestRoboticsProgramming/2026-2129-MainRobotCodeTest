@@ -17,6 +17,7 @@ import com.swrobotics.robot.commands.PlaySongCommand;
 import com.swrobotics.robot.control.ControlBoard;
 import com.swrobotics.robot.logging.FieldView;
 import com.swrobotics.robot.logging.Logging;
+import com.swrobotics.robot.subsystems.indexer.IndexerSubsystem;
 import com.swrobotics.robot.subsystems.lights.LightsSubsystem;
 import com.swrobotics.robot.subsystems.music.MusicSubsystem;
 import com.swrobotics.robot.subsystems.motortracker.MotorTrackerSubsystem;
@@ -46,6 +47,7 @@ public class RobotContainer {
     public final MotorTrackerSubsystem motorTracker;
     public final SwerveDriveSubsystem drive;
     public final VisionSubsystem vision;
+    public final IndexerSubsystem indexer;
 
     public final LightsSubsystem lights;
     public final MusicSubsystem music;
@@ -64,6 +66,7 @@ public class RobotContainer {
 
         drive = new SwerveDriveSubsystem();
         vision = new VisionSubsystem(drive);
+        indexer = new IndexerSubsystem();
 
         lights = new LightsSubsystem(this);
 
