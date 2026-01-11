@@ -86,9 +86,6 @@ public final class ControlBoard extends SubsystemBase {
                                 && DriverStation.getMatchTime() <= Constants.kEndgameAlert2Time)
                 .onTrue(RumblePatternCommands.endgameAlertFinalCountdown(driver, 0.75));
                 
-
-        new Trigger(() -> robot.indexer.hasPiece()).onTrue(RumblePatternCommands.rumbleForTimeCommand(driver, RumbleType.kBothRumble, 1.0, 0.5)
-                .alongWith(RumblePatternCommands.rumbleForTimeCommand(operator, RumbleType.kBothRumble, 1.0, 0.5)));
     }
 
     private Translation2d getDesiredDriveTranslation() {

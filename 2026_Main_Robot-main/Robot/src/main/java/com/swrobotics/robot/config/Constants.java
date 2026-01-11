@@ -216,8 +216,8 @@ public final class Constants {
     
 
     /* --- Indexer --- */
-    public static final NTEntry<Double> kIndexerShootVoltage = new NTDouble("Indexer/Shoot Voltage", 10.0).setPersistent();
-    public static final NTEntry<Double> kIndexerIdleVoltage = new NTDouble("Indexer/Idle Voltage", 2.0).setPersistent();
+    public static final NTEntry<Double> kIndexerIntakeVoltage = new NTDouble("Indexer/Intake Voltage", 2.0).setPersistent();
+    public static final NTEntry<Double> kIndexerIdleVoltage = new NTDouble("Indexer/Outtake Voltage", 0.0).setPersistent();
 
     // This must be at the bottom of the file so it happens last
     static {
