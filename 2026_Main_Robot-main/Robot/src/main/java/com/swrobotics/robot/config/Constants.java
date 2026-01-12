@@ -210,10 +210,10 @@ public final class Constants {
     
     /* --- Expansion ---  */ //TODO: Add expansion constants here later
 
-    /* --- Indexer --- */
-    public static final NTEntry<Double> kIndexerIntakeVoltage = new NTDouble("Indexer/Intake Voltage", 3.0).setPersistent();
-    public static final NTEntry<Double> kIndexerIdleVoltage = new NTDouble("Indexer/Outtake Voltage", 0.5).setPersistent();
-
+/* --- Indexer --- */
+    public static final NTEntry<Double> kIndexerIntakeRPS = new NTDouble("Indexer/Intake RPS", 40.0).setPersistent();
+    public static final NTEntry<Double> kIndexerIdleRPS = new NTDouble("Indexer/Idle RPS", 0.0).setPersistent();
+    
     /* --- Intake  ---  */ //TODO: Add intake constants here later
 
     /* --- Lights --- */

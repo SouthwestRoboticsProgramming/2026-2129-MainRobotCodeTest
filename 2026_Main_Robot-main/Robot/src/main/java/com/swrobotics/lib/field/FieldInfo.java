@@ -18,15 +18,17 @@ public final class FieldInfo {
     /** Information for the 2025 Reefscape field */
     public static final FieldInfo REEFSCAPE_2025 =
             new FieldInfo(17.548, 8.052, FieldSymmetry.ROTATIONAL);
-    /**Information for the 2026 Rebuilt field */
+    
+            /**Information for the 2026 Rebuilt field */
     public static final FieldInfo REBUILT_2026 =
-            new FieldInfo(16.541, 8.211, FieldSymmetry.LATERAL);
+            new FieldInfo(16.54, 8.07, FieldSymmetry.LATERAL);
 
     public static DriverStation.Alliance getAlliance() {
         return DriverStation.getAlliance().orElse(null);
     }
 
     /**
+    
      * Gets the forward vector relative to the current alliance driver station.
      *
      * @return alliance forward vector
