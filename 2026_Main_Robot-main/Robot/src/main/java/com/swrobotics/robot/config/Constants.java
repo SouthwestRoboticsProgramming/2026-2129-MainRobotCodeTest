@@ -206,18 +206,25 @@ public final class Constants {
             0.002,
             0.00117
     );
+    /* --- Climber ---  */ //TODO: Add climber constants here later
+    
+    /* --- Expansion ---  */ //TODO: Add expansion constants here later
 
-    // Lights
+    /* --- Indexer --- */
+    public static final NTEntry<Double> kIndexerIntakeVoltage = new NTDouble("Indexer/Intake Voltage", 3.0).setPersistent();
+    public static final NTEntry<Double> kIndexerIdleVoltage = new NTDouble("Indexer/Outtake Voltage", 0.5).setPersistent();
+
+    /* --- Intake  ---  */ //TODO: Add intake constants here later
+
+    /* --- Lights --- */
+
     public static final int kLedStripLength = 51;
     public static final int kLowBatteryThreshold = 10; // Volts
 
-    // Motor tracking
+    /* --- Motor Tracking --- */
     public static final double kOverheatingThreshold = 75; // Celsius
-    
 
-    /* --- Indexer --- */
-    public static final NTEntry<Double> kIndexerIntakeVoltage = new NTDouble("Indexer/Intake Voltage", 2.0).setPersistent();
-    public static final NTEntry<Double> kIndexerIdleVoltage = new NTDouble("Indexer/Outtake Voltage", 0.0).setPersistent();
+
 
     // This must be at the bottom of the file so it happens last
     static {

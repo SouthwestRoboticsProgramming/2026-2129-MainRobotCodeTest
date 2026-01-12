@@ -61,6 +61,8 @@ public class IndexerSubsystem extends SubsystemBase {
          // Register motor for tracking and music
         MotorTrackerSubsystem.getInstance().addMotor("Indexer", motor);
         MusicSubsystem.getInstance().addInstrument(motor);
+
+        targetState = State.IDLE;
     }
     
     
