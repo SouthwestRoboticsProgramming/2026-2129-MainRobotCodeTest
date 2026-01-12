@@ -10,6 +10,8 @@ import com.swrobotics.robot.commands.CharacterizeWheelsCommand;
 import com.swrobotics.robot.commands.DriveCommands;
 import com.swrobotics.robot.commands.RumblePatternCommands;
 import com.swrobotics.robot.config.Constants;
+import com.swrobotics.robot.subsystems.indexer.IndexerSubsystem;
+import com.swrobotics.robot.subsystems.indexer.IndexerSubsystem.State;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -85,10 +87,20 @@ public final class ControlBoard extends SubsystemBase {
                                 && DriverStation.getMatchTime() > 0
                                 && DriverStation.getMatchTime() <= Constants.kEndgameAlert2Time)
                 .onTrue(RumblePatternCommands.endgameAlertFinalCountdown(driver, 0.75));
-                
-
-        new Trigger(() -> robot.indexer.hasPiece()).onTrue(RumblePatternCommands.rumbleForTimeCommand(driver, RumbleType.kBothRumble, 1.0, 0.5)
-                .alongWith(RumblePatternCommands.rumbleForTimeCommand(operator, RumbleType.kBothRumble, 1.0, 0.5)));
+        robot.indexer.setDefaultCommand(
+            
+        
+        
+        
+        
+        
+        
+        
+        //operator controls
+        
+        robot.indexer.commandSetState(IndexerSubsystem.State.IDLE)
+        );
+   
     }
 
     private Translation2d getDesiredDriveTranslation() {
