@@ -1,4 +1,4 @@
-package com.swrobotics.robot.subsystems.indexer;
+package com.swrobotics.robot.subsystems.intake;
 
 import org.littletonrobotics.junction.Logger;
 import com.ctre.phoenix6.controls.VelocityVoltage; // Switched to Velocity
@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class IndexerSubsystem extends SubsystemBase {
+public class IntakeSubsystem extends SubsystemBase {
 
     public enum State {
         IDLE,
@@ -25,7 +25,7 @@ public class IndexerSubsystem extends SubsystemBase {
     private final VelocityVoltage velocityControl = new VelocityVoltage(0);
     private State targetState;
 
-    public IndexerSubsystem() {
+    public IntakeSubsystem() {
         motor = IOAllocation.CAN.kIndexerMotor.createTalonFX();
         
         TalonFXConfigHelper config = new TalonFXConfigHelper();
@@ -41,7 +41,7 @@ public class IndexerSubsystem extends SubsystemBase {
 
         config.apply(motor);
             
-        MotorTrackerSubsystem.getInstance().addMotor("Indexer", motor);
+        MotorTrackerSubsystem.getInstance().addMotor("Shooter", motor);
         MusicSubsystem.getInstance().addInstrument(motor);
 
         targetState = State.IDLE;
@@ -54,15 +54,15 @@ public class IndexerSubsystem extends SubsystemBase {
 
         double targetRPS = 0;
         switch (targetState) {
-            case INTAKE -> targetRPS = Constants.kIndexerRollRPS.get();
-            case IDLE -> targetRPS = Constants.kIndexerIdleRPS.get();
+            case INTAKE -> targetRPS = Constants.kIntakeRPS.get();
+            case IDLE -> targetRPS = Constants.kIntakeIdleRPS.get();
         }
 
         // Apply control
         motor.setControl(velocityControl.withVelocity(targetRPS));
         
-        Logger.recordOutput("Indexer/TargetRPS", targetRPS);
-        Logger.recordOutput("Indexer/ActualRPS", motor.getVelocity().getValueAsDouble());
+        Logger.recordOutput("Shooter/TargetRPS", targetRPS);
+        Logger.recordOutput("Shooter/ActualRPS", motor.getVelocity().getValueAsDouble());
     }
 
     public void setTargetState(State targetState) {

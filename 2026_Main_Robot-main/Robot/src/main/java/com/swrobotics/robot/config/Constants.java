@@ -211,10 +211,12 @@ public final class Constants {
     /* --- Expansion ---  */ //TODO: Add expansion constants here later
 
 /* --- Indexer --- */
-    public static final NTEntry<Double> kIndexerIntakeRPS = new NTDouble("Indexer/Intake RPS", 40.0).setPersistent();
+    public static final NTEntry<Double> kIndexerRollRPS = new NTDouble("Indexer/Intake RPS", 40.0).setPersistent();
     public static final NTEntry<Double> kIndexerIdleRPS = new NTDouble("Indexer/Idle RPS", 0.0).setPersistent();
     
     /* --- Intake  ---  */ //TODO: Add intake constants here later
+    public static final NTEntry<Double> kIntakeRPS = new NTDouble("Intake/Intake RPS", 40.0).setPersistent();
+    public static final NTEntry<Double> kIntakeIdleRPS = new NTDouble("Intake/Idle RPS", 0.0).setPersistent();
 
     /* --- Lights --- */
 
@@ -223,7 +225,9 @@ public final class Constants {
 
     /* --- Motor Tracking --- */
     public static final double kOverheatingThreshold = 75; // Celsius
-
+    /* --- Shooter --- */
+    public static final NTEntry<Double> kShooterRPS = new NTDouble("Shooter/Intake RPS", 3000.0).setPersistent();
+    public static final NTEntry<Double> kShooterIdleRPS = new NTDouble("Shooter/Idle RPS", 0.0).setPersistent();
 
 
     // This must be at the bottom of the file so it happens last

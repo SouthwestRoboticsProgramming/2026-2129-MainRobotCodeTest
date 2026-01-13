@@ -20,6 +20,7 @@ import com.swrobotics.robot.logging.Logging;
 import com.swrobotics.robot.subsystems.indexer.IndexerSubsystem;
 import com.swrobotics.robot.subsystems.lights.LightsSubsystem;
 import com.swrobotics.robot.subsystems.music.MusicSubsystem;
+import com.swrobotics.robot.subsystems.shooter.ShooterSubsystem;
 import com.swrobotics.robot.subsystems.motortracker.MotorTrackerSubsystem;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -48,6 +49,7 @@ public class RobotContainer {
     public final SwerveDriveSubsystem drive;
     public final VisionSubsystem vision;
     public final IndexerSubsystem indexer;
+    public final ShooterSubsystem shooter;
 
     public final LightsSubsystem lights;
     public final MusicSubsystem music;
@@ -67,6 +69,7 @@ public class RobotContainer {
         drive = new SwerveDriveSubsystem();
         vision = new VisionSubsystem(drive);
         indexer = new IndexerSubsystem();
+        shooter = new ShooterSubsystem();   
 
         lights = new LightsSubsystem(this);
 
