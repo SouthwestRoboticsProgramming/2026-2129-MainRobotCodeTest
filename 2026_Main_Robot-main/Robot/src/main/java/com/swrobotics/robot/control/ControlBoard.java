@@ -71,6 +71,7 @@ public final class ControlBoard extends SubsystemBase {
         ));
 
         new Trigger(CHARACTERISE_WHEEL_RADIUS::get).whileTrue(new CharacterizeWheelsCommand(robot.drive));
+        //TODO: Put in rumble commands for each 25 second interval of active/inactive during teleop
 
         // Endgame Notice (controller rumble)
         new Trigger(
@@ -87,19 +88,10 @@ public final class ControlBoard extends SubsystemBase {
                                 && DriverStation.getMatchTime() > 0
                                 && DriverStation.getMatchTime() <= Constants.kEndgameAlert2Time)
                 .onTrue(RumblePatternCommands.endgameAlertFinalCountdown(driver, 0.75));
-        robot.indexer.setDefaultCommand(
-            
-        
-        
-        
-        
-        
-        
         
         //operator controls
         
-        robot.indexer.commandSetState(IndexerSubsystem.State.IDLE)
-        );
+
    
     }
 

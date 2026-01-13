@@ -39,20 +39,20 @@ public final class Constants {
     public static final int kEndgameAlert2Time = 5;
 
     // Robot dimensions
-    public static final double kFrameLength = Units.inchesToMeters(30); // m
+    public static final double kFrameLength = Units.inchesToMeters(27); // m
     public static final double kFrameWidth = Units.inchesToMeters(27); // m
 
     public static final double kBumperThickness = Units.inchesToMeters(3); // FIXME
     public static final double kRobotLength = kFrameLength + kBumperThickness * 2;
     public static final double kRobotWidth = kFrameWidth + kBumperThickness * 2;
     public static final double kRobotRadius = Math.hypot(kRobotLength / 2, kRobotWidth / 2);
-    public static final double kRobotMass = Units.lbsToKilograms(135);
+    public static final double kRobotMass = Units.lbsToKilograms(135); // TODO: Measure
     // Approximation of robot as uniform cuboid
     // See https://sleipnirgroup.github.io/Choreo/usage/estimating-moi/
     // FIXME: Measure in CAD
     public static final double kRobotMOI = 1.0/12.0 * kRobotMass * (kFrameLength*kFrameLength + kFrameWidth*kFrameWidth);
-    public static final double kCOGHeightWithElevatorDown = Units.inchesToMeters(10); // TODO: Measure
-    public static final double kCOGHeightWithElevatorUp = Units.inchesToMeters(23.126);
+    public static final double kCOGHeightWithArmDown = Units.inchesToMeters(10); // TODO: Measure
+    public static final double kCOGHeightWithArmUp = Units.inchesToMeters(23.126); // TODO: Measure
 
     // Controls
     public static final int kDriverControllerPort = 0;
