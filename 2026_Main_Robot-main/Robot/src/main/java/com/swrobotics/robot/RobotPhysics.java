@@ -7,8 +7,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 public final class RobotPhysics {
     public static double getCenterOfGravityHeight(double elevatorHeightPct) {
         return MathUtil.lerp(
-                Constants.kCOGHeightWithElevatorDown,
-                Constants.kCOGHeightWithElevatorUp,
+                Constants.kCOGHeightWithArmDown,
+                Constants.kCOGHeightWithArmUp,
                 elevatorHeightPct
         );
     }
