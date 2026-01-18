@@ -17,6 +17,10 @@ import com.swrobotics.robot.commands.PlaySongCommand;
 import com.swrobotics.robot.control.ControlBoard;
 import com.swrobotics.robot.logging.FieldView;
 import com.swrobotics.robot.logging.Logging;
+import com.swrobotics.robot.subsystems.swerve.SwerveDriveSubsystem;
+import com.swrobotics.robot.subsystems.vision.VisionSubsystem;
+import com.swrobotics.robot.subsystems.hood.HoodSubsystem;
+import com.swrobotics.robot.subsystems.expansions.ExpansionSubsystem;
 import com.swrobotics.robot.subsystems.indexer.IndexerSubsystem;
 import com.swrobotics.robot.subsystems.lights.LightsSubsystem;
 import com.swrobotics.robot.subsystems.music.MusicSubsystem;
@@ -50,6 +54,8 @@ public class RobotContainer {
     public final VisionSubsystem vision;
     public final IndexerSubsystem indexer;
     public final ShooterSubsystem shooter;
+    public final ExpansionSubsystem expansion;
+    public final HoodSubsystem hood;
 
     public final LightsSubsystem lights;
     public final MusicSubsystem music;
@@ -69,7 +75,9 @@ public class RobotContainer {
         drive = new SwerveDriveSubsystem();
         vision = new VisionSubsystem(drive);
         indexer = new IndexerSubsystem();
-        shooter = new ShooterSubsystem();   
+        shooter = new ShooterSubsystem(); 
+        expansion = new ExpansionSubsystem(); 
+        hood = new HoodSubsystem(); 
 
         lights = new LightsSubsystem(this);
 
