@@ -37,6 +37,15 @@ public final class Constants {
     public static final FieldInfo kField = FieldInfo.REEFSCAPE_2025;
     public static final int kEndgameAlertTime = 20;
     public static final int kEndgameAlert2Time = 5;
+    public static final int kTransferAlertTime = 130;//TODO: Set transfer alert time later
+    public static final int kActive_InactiveAlert1Time = 120;//TODO: set active/inactive alert time later
+    public static final int kActive_InactiveAlert1Time2 = 115;//TODO: set active/inactive alert time later
+    public static final int kActive_InactiveAlert2Time = 95;//TODO: set active/inactive alert time later
+    public static final int kActive_InactiveAlert2Time2 = 90;//TODO: set active/inactive alert time later
+    public static final int kActive_InactiveAlert3Time = 70;//TODO: set active/inactive alert time later
+    public static final int kActive_InactiveAlert3Time2 = 65;//TODO: set active/inactive alert time later
+    public static final int kActive_InactiveAlert4Time = 35; //TODO: set active/inactive alert time later
+    public static final int kActive_InactiveAlert4Time2 = 30; //TODO: set active/inactive alert time later
 
     // Robot dimensions
     public static final double kFrameLength = Units.inchesToMeters(27); // m
@@ -206,29 +215,42 @@ public final class Constants {
             0.002,
             0.00117
     );
-    /* --- Climber ---  */ //TODO: Add climber constants here later
-    
-    /* --- Expansion ---  */ //TODO: Add expansion constants here later
 
-/* --- Indexer --- */
+   /* --- Hood --- */ //TODO: Adjust constant values
+    public static final NTEntry<Double> kHoodIdleRotations = new NTDouble("Hood/Target Rotations", 0.0).setPersistent();
+    public static final NTEntry<Double> kHoodMovingRotations = new NTDouble("Hood/Retracted Rotations", 2.0).setPersistent();
+    public static final NTEntry<Double> kHoodReadyRotations  = new NTDouble("Hood/Extended Rotations", 0.0).setPersistent();
+    public static final NTEntry<Double> kHoodCruiseVelocity = new NTDouble("Hood/Cruise Velocity", 20.0).setPersistent();   
+    public static final NTEntry<Double> kHoodAcceleration  = new NTDouble("Hood/Acceleration", 80.0).setPersistent();
+
+
+    /* --- Climber ---  */ //TODO: Add climber constants here later
+
+    
+    /* --- Expansion ---  */ 
+    public static final NTEntry<Double> kExpansionRetractedRotations = new NTDouble("Expansion/Retracted Rotations", 0.0).setPersistent();
+    public static final NTEntry<Double> kExpansionExtendedRotations  = new NTDouble("Expansion/Extended Rotations", 20.0).setPersistent();
+    public static final NTEntry<Double> kExpansionCruiseVelocity = new NTDouble("Expansion/Cruise Velocity", 40.0).setPersistent();   
+    public static final NTEntry<Double> kExpansionAcceleration  = new NTDouble("Expansion/Acceleration", 160.0).setPersistent();
+    
+    /* --- Indexer --- */
     public static final NTEntry<Double> kIndexerRollRPS = new NTDouble("Indexer/Intake RPS", 40.0).setPersistent();
     public static final NTEntry<Double> kIndexerIdleRPS = new NTDouble("Indexer/Idle RPS", 0.0).setPersistent();
     
-    /* --- Intake  ---  */ //TODO: Add intake constants here later
+    /* --- Intake  ---  */ 
     public static final NTEntry<Double> kIntakeRPS = new NTDouble("Intake/Intake RPS", 40.0).setPersistent();
     public static final NTEntry<Double> kIntakeIdleRPS = new NTDouble("Intake/Idle RPS", 0.0).setPersistent();
 
     /* --- Lights --- */
-
     public static final int kLedStripLength = 51;
     public static final int kLowBatteryThreshold = 10; // Volts
 
     /* --- Motor Tracking --- */
     public static final double kOverheatingThreshold = 75; // Celsius
-    /* --- Shooter --- */
-    public static final NTEntry<Double> kShooterRPS = new NTDouble("Shooter/Intake RPS", 3000.0).setPersistent();
-    public static final NTEntry<Double> kShooterIdleRPS = new NTDouble("Shooter/Idle RPS", 0.0).setPersistent();
 
+    /* --- Shooter --- */
+    public static final NTEntry<Double> kShooterRPS = new NTDouble("Shooter/Intake RPS", 100.0).setPersistent();
+    public static final NTEntry<Double> kShooterIdleRPS = new NTDouble("Shooter/Idle RPS", 0.0).setPersistent();
 
     // This must be at the bottom of the file so it happens last
     static {
