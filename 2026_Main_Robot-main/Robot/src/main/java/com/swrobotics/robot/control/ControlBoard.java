@@ -89,7 +89,13 @@ public final class ControlBoard extends SubsystemBase {
                                 && DriverStation.getMatchTime() <= Constants.kEndgameAlert2Time)
                 .onTrue(RumblePatternCommands.endgameAlertFinalCountdown(driver, 0.75));
         
-        //operator controls
+        //TODO: add Intake/Indexer/Shooter/Expansion controls
+
+        //TODO: add Autoalign controls
+
+        //TODO: add Climber controls
+
+    
         
 
    

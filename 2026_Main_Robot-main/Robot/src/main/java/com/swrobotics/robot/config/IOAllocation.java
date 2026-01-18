@@ -20,10 +20,13 @@ public final class IOAllocation {
         public static final SwerveIDs kSwerveBR = new SwerveIDs(12, 8, 4);
         public static final CanId kJosh = new CanId(13, kGerald); // Gyroscope
 
-        public static final CanId kPDP = new CanId(62, kRIO);
+        public static final CanId kPDP = new CanId(50, kRIO);
 
-        public static final CanId kShooterMotor = new CanId(67, kGerald);
-        public static final CanId kIndexerMotor = new CanId(41, kGerald);
+        public static final CanId kShooterMotor = new CanId(14, kGerald);
+        public static final CanId kIndexerMotor = new CanId(15, kGerald);
+        public static final CanId kIntakeMotor = new CanId(16, kGerald);
+        public static final CanId kExpansionMotor = new CanId(17, kGerald);
+        public static final CanId kHoodMotor = new CanId(18, kGerald);
     }
 
     public static final class RIO {
