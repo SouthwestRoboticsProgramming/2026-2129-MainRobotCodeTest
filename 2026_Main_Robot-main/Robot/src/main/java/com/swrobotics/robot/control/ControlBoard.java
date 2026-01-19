@@ -71,7 +71,81 @@ public final class ControlBoard extends SubsystemBase {
         ));
 
         new Trigger(CHARACTERISE_WHEEL_RADIUS::get).whileTrue(new CharacterizeWheelsCommand(robot.drive));
-        //TODO: Put in rumble commands for each 25 second interval of active/inactive during teleop
+        new Trigger(
+            () ->
+                    DriverStation.isTeleopEnabled()
+                            && DriverStation.getMatchTime() > 0
+                            && DriverStation.getMatchTime() <= Constants.kTransferAlertTime)
+            .onTrue(RumblePatternCommands.inactive_Active_TransferAlert(driver, 0.75)
+                    .alongWith(RumblePatternCommands.inactive_Active_TransferAlert(operator, 0.75)));
+
+        new Trigger(
+                () ->
+                        DriverStation.isTeleopEnabled()
+                                && DriverStation.getMatchTime() > 0
+                                && DriverStation.getMatchTime() <= Constants.kActive_InactiveAlert1Time)
+                .onTrue(RumblePatternCommands.inactive_Active_TransferAlert(driver, 0.5)
+                        .alongWith(RumblePatternCommands.inactive_Active_TransferAlert(operator, 0.5)));
+
+        new Trigger(
+            () ->
+                    DriverStation.isTeleopEnabled()
+                            && DriverStation.getMatchTime() > 0
+                            && DriverStation.getMatchTime() <= Constants.kActive_InactiveAlert1Time2)
+            .onTrue(RumblePatternCommands.inactive_Active_TransferAlert(driver, 0.75)
+                    .alongWith(RumblePatternCommands.inactive_Active_TransferAlert(operator, 0.75)));
+
+
+        new Trigger(
+            () ->
+                    DriverStation.isTeleopEnabled()
+                            && DriverStation.getMatchTime() > 0
+                            && DriverStation.getMatchTime() <= Constants.kActive_InactiveAlert2Time)
+            .onTrue(RumblePatternCommands.inactive_Active_TransferAlert(driver, 0.5)
+                    .alongWith(RumblePatternCommands.inactive_Active_TransferAlert(operator, 0.5)));
+        
+        new Trigger(
+            () ->
+                    DriverStation.isTeleopEnabled()
+                            && DriverStation.getMatchTime() > 0
+                            && DriverStation.getMatchTime() <= Constants.kActive_InactiveAlert2Time2)
+            .onTrue(RumblePatternCommands.inactive_Active_TransferAlert(driver, 0.75)
+                    .alongWith(RumblePatternCommands.inactive_Active_TransferAlert(operator, 0.75)));
+        
+        new Trigger(
+            () ->
+                    DriverStation.isTeleopEnabled()
+                            && DriverStation.getMatchTime() > 0
+                            && DriverStation.getMatchTime() <= Constants.kActive_InactiveAlert3Time)
+            .onTrue(RumblePatternCommands.inactive_Active_TransferAlert(driver, 0.5)
+                    .alongWith(RumblePatternCommands.inactive_Active_TransferAlert(operator, 0.5)));
+        
+        new Trigger(
+            () ->
+                    DriverStation.isTeleopEnabled()
+                            && DriverStation.getMatchTime() > 0
+                            && DriverStation.getMatchTime() <= Constants.kActive_InactiveAlert3Time2)
+            .onTrue(RumblePatternCommands.inactive_Active_TransferAlert(driver, 0.75)
+                    .alongWith(RumblePatternCommands.inactive_Active_TransferAlert(operator, 0.75)));
+        
+        new Trigger(
+            () ->
+                    DriverStation.isTeleopEnabled()
+                            && DriverStation.getMatchTime() > 0
+                            && DriverStation.getMatchTime() <= Constants.kActive_InactiveAlert4Time)
+            .onTrue(RumblePatternCommands.inactive_Active_TransferAlert(driver, 0.5)
+                    .alongWith(RumblePatternCommands.inactive_Active_TransferAlert(operator, 0.5)));
+
+        new Trigger(
+            () ->
+                    DriverStation.isTeleopEnabled()
+                            && DriverStation.getMatchTime() > 0
+                            && DriverStation.getMatchTime() <= Constants.kActive_InactiveAlert4Time2)
+            .onTrue(RumblePatternCommands.inactive_Active_TransferAlert(driver, 0.75)
+                    .alongWith(RumblePatternCommands.inactive_Active_TransferAlert(operator, 0.75)));
+                    
+                    
+        
 
         // Endgame Notice (controller rumble)
         new Trigger(
@@ -94,9 +168,6 @@ public final class ControlBoard extends SubsystemBase {
         //TODO: add Autoalign controls
 
         //TODO: add Climber controls
-
-    
-        
 
    
     }
