@@ -22,6 +22,8 @@ import com.swrobotics.robot.subsystems.lights.LightsSubsystem;
 import com.swrobotics.robot.subsystems.music.MusicSubsystem;
 import com.swrobotics.robot.subsystems.shooter.ShooterSubsystem;
 import com.swrobotics.robot.subsystems.intake.IntakeSubsystem;
+import com.swrobotics.robot.subsystems.hood.HoodSubsystem;
+import com.swrobotics.robot.subsystems.expansions.ExpansionSubsystem;
 import com.swrobotics.robot.subsystems.motortracker.MotorTrackerSubsystem;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -52,6 +54,8 @@ public class RobotContainer {
     public final IndexerSubsystem indexer;
     public final ShooterSubsystem shooter;
     public final IntakeSubsystem intake;
+    public final HoodSubsystem hood;
+    public final ExpansionSubsystem expansion;
 
     public final LightsSubsystem lights;
     public final MusicSubsystem music;
@@ -73,6 +77,8 @@ public class RobotContainer {
         indexer = new IndexerSubsystem();
         shooter = new ShooterSubsystem();
         intake = new IntakeSubsystem();
+        hood = new HoodSubsystem();
+        expansion = new ExpansionSubsystem();
 
         lights = new LightsSubsystem(this);
 

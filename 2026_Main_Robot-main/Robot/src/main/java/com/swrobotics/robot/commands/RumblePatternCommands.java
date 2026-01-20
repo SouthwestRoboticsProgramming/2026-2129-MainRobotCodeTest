@@ -12,6 +12,19 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 public final class RumblePatternCommands {
     private static final int BPM = 140;
     private static final double eightNoteSeconds = 60.0 / BPM / 2.0; // Assume 4:4
+    private static final double sixteenthNoteSeconds = 60.0 / BPM / 4.0;
+
+    public static Command inactive_Active_TransferAlert(XboxController controller, double power) {
+        // 1 and 3 4
+        return Commands.sequence(
+            rumbleForTimeCommand(controller, RumbleType.kBothRumble, power, sixteenthNoteSeconds * 2),
+            new WaitCommand(sixteenthNoteSeconds),
+            rumbleForTimeCommand(controller, RumbleType.kLeftRumble, power, sixteenthNoteSeconds),
+            rumbleForTimeCommand(controller, RumbleType.kRightRumble, power, sixteenthNoteSeconds),
+            new WaitCommand(sixteenthNoteSeconds),
+            rumbleForTimeCommand(controller, RumbleType.kBothRumble, power, sixteenthNoteSeconds * 2)
+        );
+    }
 
     public static Command endgameAlert(XboxController controller, double power) {
         // 1 and 3 4
