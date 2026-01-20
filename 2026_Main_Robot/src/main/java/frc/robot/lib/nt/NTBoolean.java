@@ -1,4 +1,4 @@
-package frc.robot.nt;
+package frc.robot.lib.nt;
 
 public class NTBoolean extends NTPrimitive<Boolean> {
 

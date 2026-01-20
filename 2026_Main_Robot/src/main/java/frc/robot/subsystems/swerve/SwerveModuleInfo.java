@@ -2,7 +2,7 @@ package frc.robot.subsystems.swerve;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.IOAllocation;
-import frc.robot.nt.NTEntry;
+import frc.robot.lib.nt.NTEntry;
 
 public record SwerveModuleInfo(
         String canBus,

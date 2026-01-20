@@ -1,4 +1,4 @@
-package frc.robot.nt;
+package frc.robot.lib.nt;
 
 public final class NTString extends NTPrimitive<String> {
     private final String defaultVal;

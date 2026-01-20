@@ -27,8 +27,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.FieldView;
-import frc.robot.nt.NTBoolean;
-import frc.robot.nt.NTEntry;
+import frc.robot.lib.nt.NTBoolean;
+import frc.robot.lib.nt.NTEntry;
 
 public class SwerveDriveSubsystem extends SubsystemBase {
     private static final NTBoolean CALIBRATE = new NTBoolean("Drive/Modules/Calibrate", false);

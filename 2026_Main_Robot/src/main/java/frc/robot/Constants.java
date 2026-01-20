@@ -15,8 +15,8 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
-import frc.robot.nt.NTDouble;
-import frc.robot.nt.NTEntry;
+import frc.robot.lib.nt.NTDouble;
+import frc.robot.lib.nt.NTEntry;
 import frc.robot.subsystems.swerve.SwerveModuleInfo;
 import frc.robot.subsystems.vision.limelight.LimelightCamera;
 

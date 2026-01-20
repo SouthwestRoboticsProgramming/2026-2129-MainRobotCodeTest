@@ -1,4 +1,4 @@
-package frc.robot.nt;
+package frc.robot.lib.nt;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;

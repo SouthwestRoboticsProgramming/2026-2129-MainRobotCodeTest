@@ -1,4 +1,4 @@
-package frc.robot.nt;
+package frc.robot.lib.nt;
 
 public final class NTDouble extends NTPrimitive<Double> {
     private final double defaultVal;

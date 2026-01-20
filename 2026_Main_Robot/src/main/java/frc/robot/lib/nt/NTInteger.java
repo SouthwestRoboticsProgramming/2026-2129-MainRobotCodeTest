@@ -1,4 +1,4 @@
-package frc.robot.nt;
+package frc.robot.lib.nt;
 
 public final class NTInteger extends NTPrimitive<Integer> {
     private final int defaultVal;
