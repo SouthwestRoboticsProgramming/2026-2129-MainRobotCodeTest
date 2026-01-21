@@ -6,6 +6,8 @@ import com.swrobotics.lib.utils.PolynomialRegression;
 import com.swrobotics.robot.config.Constants;
 import com.swrobotics.robot.subsystems.lights.LightsSubsystem;
 import com.swrobotics.robot.subsystems.swerve.SwerveDriveSubsystem;
+import com.swrobotics.robot.subsystems.vision.limelight.LimelightCamera;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -150,6 +152,10 @@ public final class DriveCommands {
                         toleranceSupplier.get()
                 ));
     }
+
+    // public static Command autoalignToHub(SwerveDriveSubsystem drive, LightsSubsystem lights, LimelightCamera frontLeftLimelight, LimelightCamera frontRightLimelight, LimelightCamera backLimelight, int hubTagId /*  AprilTag ID for 2026 Rebuilt hub*/){
+        
+    // }TODO: Implement autoalign to hub command using distance constant
 
     public static Command feedforwardCharacterization(SwerveDriveSubsystem drive) {
         List<Double> velocitySamples = new ArrayList<>();
