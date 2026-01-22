@@ -12,7 +12,6 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.swrobotics.lib.net.NTEntry;
 import com.swrobotics.robot.config.Constants;
-import com.swrobotics.robot.subsystems.motortracker.MotorTrackerSubsystem;
 import com.swrobotics.robot.subsystems.music.MusicSubsystem;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -56,11 +55,7 @@ public class CtreSwerveIO implements SwerveIO {
         );
 
         for (int i = 0; i < kModuleCount; i++) {
-            String name = Constants.kSwerveModuleInfos[i].name();
-
             SwerveModule<TalonFX, TalonFX, CANcoder> module = drivetrain.getModule(i);
-            MotorTrackerSubsystem.getInstance().addMotor(name + " Drive", module.getDriveMotor());
-            MotorTrackerSubsystem.getInstance().addMotor(name + " Steer", module.getSteerMotor());
             MusicSubsystem.getInstance().addInstrument(module.getDriveMotor());
             MusicSubsystem.getInstance().addInstrument(module.getSteerMotor());
 

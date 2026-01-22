@@ -24,7 +24,6 @@ import com.swrobotics.robot.subsystems.shooter.ShooterSubsystem;
 import com.swrobotics.robot.subsystems.intake.IntakeSubsystem;
 import com.swrobotics.robot.subsystems.hood.HoodSubsystem;
 import com.swrobotics.robot.subsystems.expansions.ExpansionSubsystem;
-import com.swrobotics.robot.subsystems.motortracker.MotorTrackerSubsystem;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -48,7 +47,6 @@ public class RobotContainer {
     private final LoggedDashboardChooser<Command> autoSelector;
     private final LoggedDashboardChooser<Double> autoDelaySelector;
 
-    public final MotorTrackerSubsystem motorTracker;
     public final SwerveDriveSubsystem drive;
     public final VisionSubsystem vision;
     public final IndexerSubsystem indexer;
@@ -70,7 +68,6 @@ public class RobotContainer {
 
         // These must be initialized first
         music = new MusicSubsystem();
-        motorTracker = new MotorTrackerSubsystem();
 
         drive = new SwerveDriveSubsystem();
         vision = new VisionSubsystem(drive);

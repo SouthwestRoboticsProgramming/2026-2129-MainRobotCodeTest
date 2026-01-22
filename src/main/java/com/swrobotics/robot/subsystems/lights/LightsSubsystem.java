@@ -66,12 +66,9 @@ public final class LightsSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        boolean overheating = robot.motorTracker.isOverheating();
         boolean batteryLow = RobotController.getBatteryVoltage() < Constants.kLowBatteryThreshold;
 
-        if (overheating) {
-            showOverheating();
-        } else if (batteryLowDebounce.calculate(batteryLow)) {
+        if (batteryLowDebounce.calculate(batteryLow)) {
             showLowBattery();
         } else if (commandRequest != null) {
             applySolid(commandRequest);

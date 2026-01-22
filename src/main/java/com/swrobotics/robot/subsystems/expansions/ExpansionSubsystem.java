@@ -10,7 +10,6 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.swrobotics.lib.ctre.TalonFXConfigHelper;
 import com.swrobotics.robot.config.IOAllocation;
 import com.swrobotics.robot.config.Constants;
-import com.swrobotics.robot.subsystems.motortracker.MotorTrackerSubsystem;
 import com.swrobotics.robot.subsystems.music.MusicSubsystem;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -52,7 +51,6 @@ public class ExpansionSubsystem extends SubsystemBase {
 
         motor.setPosition(0); // zero at startup
 
-        MotorTrackerSubsystem.getInstance().addMotor("Expansion", motor);
         MusicSubsystem.getInstance().addInstrument(motor);
 
         targetState = State.RETRACTED;

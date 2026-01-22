@@ -11,7 +11,6 @@ import com.swrobotics.lib.ctre.TalonFXConfigHelper;
 import com.swrobotics.robot.config.Constants;
 import com.swrobotics.robot.config.IOAllocation;
 import com.swrobotics.robot.subsystems.hood.HoodSubsystem.State;
-import com.swrobotics.robot.subsystems.motortracker.MotorTrackerSubsystem;
 import com.swrobotics.robot.subsystems.music.MusicSubsystem;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -50,7 +49,6 @@ public class HoodSubsystem extends SubsystemBase {
 
         motor.setPosition(0); // zero at startup
 
-        MotorTrackerSubsystem.getInstance().addMotor("Expansion", motor);
         MusicSubsystem.getInstance().addInstrument(motor);
 
         targetState = State.IDLE;
