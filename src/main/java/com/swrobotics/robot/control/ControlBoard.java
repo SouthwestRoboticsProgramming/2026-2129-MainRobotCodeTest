@@ -1,7 +1,6 @@
 package com.swrobotics.robot.control;
 
 import com.swrobotics.lib.field.FieldInfo;
-import com.swrobotics.lib.input.XboxController;
 import com.swrobotics.lib.net.NTBoolean;
 import com.swrobotics.lib.net.NTEntry;
 import com.swrobotics.lib.utils.MathUtil;
@@ -10,18 +9,14 @@ import com.swrobotics.robot.commands.CharacterizeWheelsCommand;
 import com.swrobotics.robot.commands.DriveCommands;
 import com.swrobotics.robot.commands.RumblePatternCommands;
 import com.swrobotics.robot.config.Constants;
-import com.swrobotics.robot.subsystems.indexer.IndexerSubsystem;
-import com.swrobotics.robot.subsystems.indexer.IndexerSubsystem.State;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public final class ControlBoard extends SubsystemBase {
@@ -42,17 +37,16 @@ public final class ControlBoard extends SubsystemBase {
     private static final NTEntry<Boolean> CHARACTERISE_WHEEL_RADIUS = new NTBoolean("Drive/Characterize Wheel Radius", false);
 
     private final RobotContainer robot;
-    public final XboxController driver;
-    public final XboxController operator;
+    public final CommandXboxController driver;
+    public final CommandXboxController operator;
 
     private final DriveAccelFilter driveControlFilter;
 
     public ControlBoard(RobotContainer robot) {
         this.robot = robot;
 
-        // Passing deadband here means we don't have to deadband anywhere else
-        driver = new XboxController(Constants.kDriverControllerPort, Constants.kDeadband);
-        operator = new XboxController(Constants.kOperatorControllerPort, Constants.kDeadband);
+        driver = new CommandXboxController(Constants.kDriverControllerPort);
+        operator = new CommandXboxController(Constants.kOperatorControllerPort);
 
         driveControlFilter = new DriveAccelFilter(Constants.kDriveControlMaxAccel);
 
@@ -61,8 +55,8 @@ public final class ControlBoard extends SubsystemBase {
 
     private void configureControls() {
         // Gyro reset buttons
-        driver.start.onReleased(() -> robot.drive.resetRotation(new Rotation2d()));
-        driver.back.onReleased(() -> robot.drive.resetRotation(new Rotation2d())); // Two buttons to reset gyro so the driver can't get confused
+        driver.start().onFalse(Commands.run(() -> robot.drive.resetRotation(new Rotation2d())));
+        driver.back().onFalse(Commands.run(() -> robot.drive.resetRotation(new Rotation2d()))); // Two buttons to reset gyro so the driver can't get confused
 
         robot.drive.setDefaultCommand(DriveCommands.driveFieldRelative(
                 robot.drive,
@@ -178,7 +172,10 @@ public final class ControlBoard extends SubsystemBase {
     private Translation2d getDriveTranslation() {
         double maxSpeed = Constants.kDriveMaxAchievableSpeed;
 
-        Translation2d leftStick = driver.getLeftStick();
+        Translation2d leftStick = MathUtil.deadband2d(
+            new Translation2d(driver.getLeftX(), driver.getLeftY()),
+            Constants.kDeadband
+        );
 
         // Apply an exponential curve to the driver's input. This allows the
         // driver to have slower, more precise movement in the center of the
@@ -203,7 +200,8 @@ public final class ControlBoard extends SubsystemBase {
      * @return radians per second input for the drive base
      */
     private double getDriveRotation() {
-        double input = MathUtil.powerWithSign(-driver.rightStickX.get(), Constants.kDriveControlTurnPower);
+        double rightStickX = MathUtil.deadband(driver.getRightX(), Constants.kDeadband);
+        double input = MathUtil.powerWithSign(-rightStickX, Constants.kDriveControlTurnPower);
         return Units.rotationsToRadians(input * Constants.kDriveControlMaxTurnSpeed);
     }
 
