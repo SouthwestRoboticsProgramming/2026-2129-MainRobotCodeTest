@@ -1,4 +1,4 @@
-package com.swrobotics.robot.subsystems.vision.limelight;
+package com.swrobotics.robot.subsystems.vision;
 
 import com.swrobotics.lib.utils.MathUtil;
 import edu.wpi.first.math.Matrix;
@@ -8,11 +8,17 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj.DriverStation;
 
 import java.util.List;
 
 public final class LimelightCamera {
+    private static final String MEGATAG_1_NAME = "botpose_wpiblue";
+    private static final String MEGATAG_2_NAME = "botpose_orb_wpiblue";
+    private static final String ORIENTATION_NAME = "robot_orientation_set";
+    private static final String LOCATION_NAME = "camerapose_robotspace_set";
+
     // forward, right, up in meters; pitch, yaw, roll in degrees CCW
     public record MountingLocation(
             double forward, double right, double up,
@@ -28,35 +34,71 @@ public final class LimelightCamera {
 
     private record PoseEstimate(Pose2d pose, double timestamp, int tagCount, double avgTagDist) {}
 
-    private final String name;
     private final Config config;
 
-    private final LimelightIO io;
-    private final LimelightIO.Inputs inputs;
+    private final DoubleArraySubscriber mt1EstimateSub;
+    private final DoubleArraySubscriber mt2EstimateSub;
+    private final DoubleArrayPublisher robotOrientationPub;
 
     private double prevUpdateTimestamp;
 
     public LimelightCamera(String name, MountingLocation location, Config config) {
-        this.name = name;
         this.config = config;
 
-        io = new NTLimelightIO(name, location);
-        inputs = new LimelightIO.Inputs();
+        NetworkTable table = NetworkTableInstance.getDefault().getTable(name);
+
+        mt1EstimateSub = table.getDoubleArrayTopic(MEGATAG_1_NAME).subscribe(new double[0]);
+        mt2EstimateSub = table.getDoubleArrayTopic(MEGATAG_2_NAME).subscribe(new double[0]);
+
+        robotOrientationPub = table.getDoubleArrayTopic(ORIENTATION_NAME).publish();
+
+        DoubleArrayPublisher mountingLocationPub = table.getDoubleArrayTopic(LOCATION_NAME).publish();
+        mountingLocationPub.set(new double[] {
+            location.forward(), location.right(), location.up(),
+            location.roll(), location.pitch(), location.yaw()
+        });
 
         prevUpdateTimestamp = Double.NaN;
     }
 
-    public void updateRobotState(double yaw, double yawRate) {
-        io.updateRobotState(yaw, yawRate);
+    public void updateRobotState(double yawAngle, double yawRate) {
+        robotOrientationPub.set(new double[] {
+            yawAngle, yawRate, 0, 0, 0, 0
+        });
     }
 
     public void getNewUpdates(List<Update> updatesOut, boolean useMegaTag2) {
-        io.updateInputs(inputs);
-
-        PoseEstimate mt1 = decodeEstimate(inputs.megaTag1);
-        PoseEstimate mt2 = decodeEstimate(inputs.megaTag2);
+        PoseEstimate mt1 = decodeEstimate(mt1EstimateSub);
+        PoseEstimate mt2 = decodeEstimate(mt2EstimateSub);
 
         processEstimate(updatesOut, mt1, mt2, useMegaTag2);
+    }
+
+    private PoseEstimate decodeEstimate(DoubleArraySubscriber sub) {
+        // Limelight 3G AprilTag processing runs at about 30 FPS, which is less
+        // than the periodic rate of 50 Hz, so this shouldn't miss any frames
+        TimestampedDoubleArray estimate = sub.getAtomic();
+        long timestamp = estimate.timestamp;
+        double[] data = estimate.value;
+
+        // Incomplete data from Limelight
+        if (data.length < 10)
+            return null;
+
+        Pose2d pose = new Pose2d(
+            new Translation2d(data[0], data[1]),
+            Rotation2d.fromDegrees(data[5]));
+        double latency = data[6];
+        int tagCount = (int) data[7];
+        double avgTagDist = data[9];
+
+        // No tags seen or Limelight returns origin for some reason
+        if (tagCount <= 0 || (pose.getX() == 0 && pose.getY() == 0))
+            return null;
+
+        double correctedTimestamp = (timestamp / 1000000.0) - (latency / 1000.0);
+
+        return new PoseEstimate(pose, correctedTimestamp, tagCount, avgTagDist);
     }
 
     private void processEstimate(List<Update> updatesOut, PoseEstimate mt1, PoseEstimate mt2, boolean useMegaTag2) {
@@ -100,29 +142,5 @@ public final class LimelightCamera {
                 est.timestamp,
                 VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev)
         ));
-    }
-
-    private PoseEstimate decodeEstimate(LimelightIO.EstimateInputs inputs) {
-        long timestamp = inputs.timestamp;
-        double[] data = inputs.data;
-
-        // Incomplete data from Limelight
-        if (data.length < 10)
-            return null;
-
-        Pose2d pose = new Pose2d(
-                new Translation2d(data[0], data[1]),
-                Rotation2d.fromDegrees(data[5]));
-        double latency = data[6];
-        int tagCount = (int) data[7];
-        double avgTagDist = data[9];
-
-        // No tags seen or Limelight returns origin for some reason
-        if (tagCount <= 0 || (pose.getX() == 0 && pose.getY() == 0))
-            return null;
-
-        double correctedTimestamp = (timestamp / 1000000.0) - (latency / 1000.0);
-
-        return new PoseEstimate(pose, correctedTimestamp, tagCount, avgTagDist);
     }
 }

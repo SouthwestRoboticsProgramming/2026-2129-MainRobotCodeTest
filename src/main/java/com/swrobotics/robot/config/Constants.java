@@ -14,7 +14,7 @@ import com.swrobotics.lib.field.FieldInfo;
 import com.swrobotics.lib.net.NTDouble;
 import com.swrobotics.lib.net.NTEntry;
 import com.swrobotics.robot.subsystems.swerve.SwerveModuleInfo;
-import com.swrobotics.robot.subsystems.vision.limelight.LimelightCamera;
+import com.swrobotics.robot.subsystems.vision.LimelightCamera;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.numbers.N1;
