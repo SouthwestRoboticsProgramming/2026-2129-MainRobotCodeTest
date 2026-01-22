@@ -1,15 +1,12 @@
 package com.swrobotics.robot.subsystems.swerve;
 
 import com.ctre.phoenix6.swerve.*;
-import com.pathplanner.lib.config.ModuleConfig;
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
-import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.swrobotics.lib.field.FieldInfo;
 import com.swrobotics.lib.net.NTBoolean;
-import com.swrobotics.lib.pathfinding.pathplanner.AutoBuilderExt;
-import com.swrobotics.lib.pathfinding.pathplanner.SyncPathfinder;
 import com.swrobotics.robot.config.Constants;
 import com.swrobotics.robot.logging.FieldView;
 import edu.wpi.first.math.Matrix;
@@ -21,8 +18,6 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -41,7 +36,7 @@ public final class SwerveDriveSubsystem extends SubsystemBase {
             io = new SimSwerveIO();
         inputs = new SwerveIO.Inputs();
 
-        AutoBuilderExt.configure(
+        AutoBuilder.configure(
                 this::getEstimatedPose,
                 this::resetPose,
                 this::getRobotRelativeSpeeds,
@@ -58,7 +53,6 @@ public final class SwerveDriveSubsystem extends SubsystemBase {
                 ),
                 Constants.kPathPlannerRobotConfig,
                 () -> FieldInfo.getAlliance() == DriverStation.Alliance.Red,
-                new SyncPathfinder(),
                 this
         );
 
