@@ -1,5 +1,6 @@
 package com.swrobotics.robot.config;
 
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -9,7 +10,7 @@ import edu.wpi.first.wpilibj.RobotBase;
  */
 public final class IOAllocation {
     public static final class CAN {
-        private static final String kRIO = "";
+        private static final String kRIO = "rio";
         public static final String kGerald = "Gerald";
 
         // All on Gerald
@@ -77,11 +78,11 @@ public final class IOAllocation {
         }
 
         public TalonFX createTalonFX() {
-            return new TalonFX(id(), bus());
+            return new TalonFX(id(), new CANBus(bus()));
         }
 
         public CANcoder createCANcoder() {
-            return new CANcoder(id(), bus());
+            return new CANcoder(id(), new CANBus(bus()));
         }
     }
 }

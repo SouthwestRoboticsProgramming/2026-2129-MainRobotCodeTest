@@ -84,7 +84,7 @@ public final class Robot extends TimedRobot {
                 });
 
         // Start autonomous command
-        autonomousCommand.schedule();
+        CommandScheduler.getInstance().schedule(autonomousCommand);
     }
 
     @Override

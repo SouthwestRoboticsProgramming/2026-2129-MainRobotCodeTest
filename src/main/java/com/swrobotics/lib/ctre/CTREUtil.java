@@ -17,7 +17,7 @@ public final class CTREUtil {
         } while (!status.isOK() && attemptsLeft-- > 0);
 
         String deviceDesc = device.getClass().getSimpleName()
-                + " (" + (device.getNetwork().isEmpty() ? "rio" : device.getNetwork())
+                + " (" + device.getNetwork()
                 + " " + device.getDeviceID() + ")";
         if (status.isError()) {
             DriverStation.reportError("Failure on " + deviceDesc + ": " + status.getDescription(), true);
