@@ -16,7 +16,6 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.swrobotics.lib.ctre.TalonFXConfigHelper;
 import com.swrobotics.robot.config.Constants;
 import com.swrobotics.robot.config.IOAllocation;
-import com.swrobotics.robot.subsystems.music.MusicSubsystem;
 
 // WPILib imports
 
@@ -63,10 +62,6 @@ public class IndexerSubsystem extends SubsystemBase {
         // Apply configuration to motor
 
         config.apply(motor);
-        
-        // Register motor with subsystems for tracking and music
-
-        MusicSubsystem.getInstance().addInstrument(motor);
 
         // Set initial target state which in this case is IDLE
 

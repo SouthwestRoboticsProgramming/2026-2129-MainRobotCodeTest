@@ -12,7 +12,6 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.swrobotics.lib.net.NTEntry;
 import com.swrobotics.robot.config.Constants;
-import com.swrobotics.robot.subsystems.music.MusicSubsystem;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -56,8 +55,6 @@ public class CtreSwerveIO implements SwerveIO {
 
         for (int i = 0; i < kModuleCount; i++) {
             SwerveModule<TalonFX, TalonFX, CANcoder> module = drivetrain.getModule(i);
-            MusicSubsystem.getInstance().addInstrument(module.getDriveMotor());
-            MusicSubsystem.getInstance().addInstrument(module.getSteerMotor());
 
             CurrentLimitsConfigs driveLimits = new CurrentLimitsConfigs()
                     .withStatorCurrentLimit(Constants.kDriveStatorCurrentLimit)

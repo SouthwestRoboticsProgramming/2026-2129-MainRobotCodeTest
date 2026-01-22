@@ -1,6 +1,5 @@
 package com.swrobotics.robot;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -13,13 +12,11 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.swrobotics.robot.commands.PlaySongCommand;
 import com.swrobotics.robot.control.ControlBoard;
 import com.swrobotics.robot.logging.FieldView;
 import com.swrobotics.robot.logging.Logging;
 import com.swrobotics.robot.subsystems.indexer.IndexerSubsystem;
 import com.swrobotics.robot.subsystems.lights.LightsSubsystem;
-import com.swrobotics.robot.subsystems.music.MusicSubsystem;
 import com.swrobotics.robot.subsystems.shooter.ShooterSubsystem;
 import com.swrobotics.robot.subsystems.intake.IntakeSubsystem;
 import com.swrobotics.robot.subsystems.hood.HoodSubsystem;
@@ -28,7 +25,6 @@ import com.swrobotics.robot.subsystems.expansions.ExpansionSubsystem;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 
 /**
@@ -56,18 +52,12 @@ public class RobotContainer {
     public final ExpansionSubsystem expansion;
 
     public final LightsSubsystem lights;
-    public final MusicSubsystem music;
 
     public final ControlBoard controlboard;
-
-    private Command musicCommand;
 
     public RobotContainer() {
         // Turn off joystick warnings in sim
         DriverStation.silenceJoystickConnectionWarning(RobotBase.isSimulation());
-
-        // These must be initialized first
-        music = new MusicSubsystem();
 
         drive = new SwerveDriveSubsystem();
         vision = new VisionSubsystem(drive);
@@ -104,10 +94,6 @@ public class RobotContainer {
 
         FieldView.publish();
         RobotView.publish();
-
-        // Play startup song
-        CommandScheduler.getInstance().schedule(musicCommand = Commands.waitSeconds(5)
-                .andThen(new PlaySongCommand(music, "music" + File.separator + "xp.chrp")));
     }
 
     private record AutoEntry(String name, Command cmd) {}
@@ -137,21 +123,6 @@ public class RobotContainer {
 
     public void disabledInit() {
         lights.disabledInit();
-
-        if (DriverStation.isEStopped()) {
-            if (musicCommand != null)
-                musicCommand.cancel();
-
-            // Play abort sound
-            CommandScheduler.getInstance().schedule(musicCommand = new PlaySongCommand(
-                    music,
-                    "music" + File.separator + "abort.chrp"));
-        }
-    }
-
-    public void disabledExit() {
-        if (musicCommand != null)
-            musicCommand.cancel();
     }
 
     public double getAutoDelay() {

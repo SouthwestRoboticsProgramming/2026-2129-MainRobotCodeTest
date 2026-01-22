@@ -101,11 +101,6 @@ public final class Robot extends LoggedRobot {
         robotContainer.disabledInit();
     }
 
-    @Override
-    public void disabledExit() {
-        robotContainer.disabledExit();
-    }
-
     // Override these so WPILib doesn't print unhelpful warnings
     @Override public void simulationPeriodic() {}
     @Override public void disabledPeriodic() {}
