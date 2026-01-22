@@ -9,7 +9,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import org.littletonrobotics.junction.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,10 +61,6 @@ public final class VisionSubsystem extends SubsystemBase {
             poses[i] = updates.get(i).pose();
         }
         FieldView.visionEstimates.setPoses(poses);
-
-        Logger.recordOutput("Limelight/Vision Updates", poses);
-        Logger.recordOutput("Limelight/Updates Ignored", ignoreUpdates);
-        Logger.recordOutput("Limelight/Using MegaTag 2", useMegaTag2);
 
         if (ignoreUpdates)
             return;

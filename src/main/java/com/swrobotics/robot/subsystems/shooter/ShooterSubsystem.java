@@ -1,6 +1,5 @@
 package com.swrobotics.robot.subsystems.shooter;
 
-import org.littletonrobotics.junction.Logger;
 import com.ctre.phoenix6.controls.VelocityVoltage; // Switched to Velocity
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -55,9 +54,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
         // Apply control
         motor.setControl(velocityControl.withVelocity(targetRPS));
-        
-        Logger.recordOutput("Shooter/TargetRPS", targetRPS);
-        Logger.recordOutput("Shooter/ActualRPS", motor.getVelocity().getValueAsDouble());
     }
 
     public void setTargetState(State targetState) {

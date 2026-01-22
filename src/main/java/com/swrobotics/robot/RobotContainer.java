@@ -7,14 +7,12 @@ import java.util.List;
 import com.swrobotics.robot.logging.RobotView;
 import com.swrobotics.robot.subsystems.swerve.SwerveDriveSubsystem;
 import com.swrobotics.robot.subsystems.vision.VisionSubsystem;
-import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.swrobotics.robot.control.ControlBoard;
 import com.swrobotics.robot.logging.FieldView;
-import com.swrobotics.robot.logging.Logging;
 import com.swrobotics.robot.subsystems.indexer.IndexerSubsystem;
 import com.swrobotics.robot.subsystems.lights.LightsSubsystem;
 import com.swrobotics.robot.subsystems.shooter.ShooterSubsystem;
@@ -24,6 +22,8 @@ import com.swrobotics.robot.subsystems.expansions.ExpansionSubsystem;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 
@@ -33,15 +33,9 @@ import edu.wpi.first.wpilibj2.command.Commands;
  * {@code robotInit()}, which allows us to have final fields for subsystems.
  */
 public class RobotContainer {
-    // Whether to simulate the robot or replay a log file
-    public static final Logging.SimMode SIM_MODE = Logging.SimMode.SIMULATE;
-//    public static final Logging.SimMode SIM_MODE = Logging.SimMode.SIMULATE_AND_LOG;
-//    public static final Logging.SimMode SIM_MODE = Logging.SimMode.REPLAY;
-    public static final boolean REPLAY_REAL_TIME = true;
-
     // Create dashboard choosers
-    private final LoggedDashboardChooser<Command> autoSelector;
-    private final LoggedDashboardChooser<Double> autoDelaySelector;
+    private final SendableChooser<Command> autoSelector;
+    private final SendableChooser<Double> autoDelaySelector;
 
     public final SwerveDriveSubsystem drive;
     public final VisionSubsystem vision;
@@ -78,19 +72,21 @@ public class RobotContainer {
         // Create a chooser to select the autonomous
         List<AutoEntry> autos = buildPathPlannerAutos();
         autos.sort(Comparator.comparing(AutoEntry::name, String.CASE_INSENSITIVE_ORDER));
-        autoSelector = new LoggedDashboardChooser<>("Auto Selector");
-        autoSelector.addDefaultOption("None", Commands.none());
+        autoSelector = new SendableChooser<>();
+        autoSelector.setDefaultOption("None", Commands.none());
+        SmartDashboard.putData("Auto Selector", autoSelector);
 
         for (AutoEntry auto : autos)
             autoSelector.addOption(auto.name(), auto.cmd());
 
         // Create a selector to select delay before running auto
-        autoDelaySelector = new LoggedDashboardChooser<>("Auto Delay");
-        autoDelaySelector.addDefaultOption("None", 0.0);
+        autoDelaySelector = new SendableChooser<>();
+        autoDelaySelector.setDefaultOption("None", 0.0);
         for (int i = 0; i < 10; i++) {
             double time = i / 2.0 + 0.5;
             autoDelaySelector.addOption(time + " seconds", time);
         }
+        SmartDashboard.putData("Auto Delay", autoDelaySelector);
 
         FieldView.publish();
         RobotView.publish();
@@ -126,10 +122,10 @@ public class RobotContainer {
     }
 
     public double getAutoDelay() {
-        return autoDelaySelector.get();
+        return autoDelaySelector.getSelected();
     }
 
     public Command getAutonomousCommand() {
-        return autoSelector.get();
+        return autoSelector.getSelected();
     }
 }

@@ -6,7 +6,6 @@ import com.swrobotics.lib.utils.PolynomialRegression;
 import com.swrobotics.robot.config.Constants;
 import com.swrobotics.robot.subsystems.lights.LightsSubsystem;
 import com.swrobotics.robot.subsystems.swerve.SwerveDriveSubsystem;
-import com.swrobotics.robot.subsystems.vision.limelight.LimelightCamera;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -14,9 +13,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import org.littletonrobotics.junction.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -213,9 +212,9 @@ public final class DriveCommands {
                     System.out.printf("\tkS=%.5f%n", kS);
                     System.out.printf("\tkV=%.5f%n", kV);
 
-                    Logger.recordOutput("Drive/FF Characterization/kS", kS);
-                    Logger.recordOutput("Drive/FF Characterization/kV", kV);
-                    Logger.recordOutput("Drive/FF Characterization/R2", R2);
+                    SmartDashboard.putNumber("FF Characterization/kS", kS);
+                    SmartDashboard.putNumber("FF Characterization/kV", kV);
+                    SmartDashboard.putNumber("FF Characterization/R2", R2);
                 })
         );
     }

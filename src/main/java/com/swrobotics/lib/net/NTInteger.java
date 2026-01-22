@@ -1,35 +1,27 @@
 package com.swrobotics.lib.net;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
-import org.littletonrobotics.junction.LogTable;
+/** Represents a {@code int} value stored in NetworkTables. */
+public final class NTInteger extends NTPrimitive<Integer> {
+    private final int defaultVal;
 
-/**
- * An integer value stored in NetworkTables. Actually stored as a double, since
- * integer entries are somewhat broken.
- */
-// TODO: Actually store as integer entry once WPILib fixes integer entries
-public final class NTInteger extends NTEntry<Integer> {
-    public NTInteger(String path, int defaultValue) {
-        super(path, defaultValue);
+    /**
+     * Creates a new {@code int} entry with a specified path. The path can be split using the '/'
+     * character to organize entries into groups.
+     *
+     * @param path path
+     */
+    public NTInteger(String path, int defaultVal) {
+        super(path, defaultVal);
+        this.defaultVal = defaultVal;
     }
 
     @Override
-    protected Integer getValue(NetworkTableEntry entry, Integer defaultValue) {
-        return (int) entry.getDouble(defaultValue);
+    public Integer get() {
+        return entry.getNumber(defaultVal).intValue();
     }
 
     @Override
-    protected void setValue(NetworkTableEntry entry, Integer value) {
-        entry.setDouble(value);
-    }
-
-    @Override
-    protected void toLog(LogTable table, String key, Integer value) {
-        table.put(key, value.doubleValue());
-    }
-
-    @Override
-    protected Integer fromLog(LogTable table, String key, Integer defaultValue) {
-        return (int) table.get(key, defaultValue.doubleValue());
+    public void set(Integer value) {
+        entry.setNumber(value);
     }
 }

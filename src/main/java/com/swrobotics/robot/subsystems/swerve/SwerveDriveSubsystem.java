@@ -21,7 +21,6 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import org.littletonrobotics.junction.Logger;
 
 public final class SwerveDriveSubsystem extends SubsystemBase {
     private static final NTBoolean CALIBRATE = new NTBoolean("Drive/Modules/Calibrate", false);
@@ -61,8 +60,6 @@ public final class SwerveDriveSubsystem extends SubsystemBase {
                 FieldView.pathPlannerPath.setPoses(path);
                 if (path.isEmpty())
                     FieldView.pathPlannerSetpoint.setPoses();
-
-                Logger.recordOutput("PathPlanner/Active Path", path.toArray(new Pose2d[0]));
             } else {
                 FieldView.pathPlannerSetpoint.setPoses();
             }
@@ -70,7 +67,6 @@ public final class SwerveDriveSubsystem extends SubsystemBase {
         PathPlannerLogging.setLogTargetPoseCallback((target) -> {
             if (target != null)
                 FieldView.pathPlannerSetpoint.setPose(target);
-            Logger.recordOutput("PathPlanner/Target Pose", target);
         });
     }
 
@@ -128,7 +124,6 @@ public final class SwerveDriveSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         io.updateInputs(inputs);
-        Logger.processInputs("Drive", inputs);
 
         FieldView.robotPose.setPose(inputs.estPose);
 

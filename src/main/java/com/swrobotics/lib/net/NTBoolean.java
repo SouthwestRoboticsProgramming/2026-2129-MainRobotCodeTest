@@ -1,30 +1,21 @@
 package com.swrobotics.lib.net;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
-import org.littletonrobotics.junction.LogTable;
+/** Represents a {@code boolean} value stored in NetworkTables. */
+public class NTBoolean extends NTPrimitive<Boolean> {
+    private final boolean defaultVal;
 
-public final class NTBoolean extends NTEntry<Boolean> {
-    public NTBoolean(String path, boolean defaultValue) {
-        super(path, defaultValue);
+    public NTBoolean(String path, boolean defaultVal) {
+        super(path, defaultVal);
+        this.defaultVal = defaultVal;
     }
 
     @Override
-    protected Boolean getValue(NetworkTableEntry entry, Boolean defaultValue) {
-        return entry.getBoolean(defaultValue);
+    public Boolean get() {
+        return entry.getBoolean(defaultVal);
     }
 
     @Override
-    protected void setValue(NetworkTableEntry entry, Boolean value) {
+    public void set(Boolean value) {
         entry.setBoolean(value);
-    }
-
-    @Override
-    protected void toLog(LogTable table, String key, Boolean value) {
-        table.put(key, value);
-    }
-
-    @Override
-    protected Boolean fromLog(LogTable table, String key, Boolean defaultValue) {
-        return table.get(key, defaultValue);
     }
 }

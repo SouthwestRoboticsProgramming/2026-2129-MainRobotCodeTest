@@ -1,9 +1,5 @@
 package com.swrobotics.robot.subsystems.indexer;
 
-// Littleton Robotics imports
-
-import org.littletonrobotics.junction.Logger;
-
 // CTRE Phoenix6 imports
 
 import com.ctre.phoenix6.controls.VelocityVoltage; // Switched to Velocity
@@ -82,11 +78,6 @@ public class IndexerSubsystem extends SubsystemBase {
 
         // Apply control
         motor.setControl(velocityControl.withVelocity(targetRPS));
-        
-        // Log target and actual RPS for monitoring
-
-        Logger.recordOutput("Indexer/TargetRPS", targetRPS);
-        Logger.recordOutput("Indexer/ActualRPS", motor.getVelocity().getValueAsDouble());
     }
 
     // Method to set the target state

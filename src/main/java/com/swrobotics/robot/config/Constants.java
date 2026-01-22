@@ -197,9 +197,4 @@ public final class Constants {
     /* --- Shooter --- */
     public static final NTEntry<Double> kShooterRPS = new NTDouble("Shooter/Intake RPS", 100.0).setPersistent();
     public static final NTEntry<Double> kShooterIdleRPS = new NTDouble("Shooter/Idle RPS", 0.0).setPersistent();
-
-    // This must be at the bottom of the file so it happens last
-    static {
-        NTEntry.cleanPersistent();
-    }
 }

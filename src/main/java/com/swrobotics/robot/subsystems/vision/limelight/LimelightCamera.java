@@ -9,32 +9,24 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
-import org.littletonrobotics.junction.Logger;
 
 import java.util.List;
 
 public final class LimelightCamera {
     // forward, right, up in meters; pitch, yaw, roll in degrees CCW
-    public static record MountingLocation(
+    public record MountingLocation(
             double forward, double right, double up,
             double roll, double pitch, double yaw) {}
 
-    public static record Config(
+    public record Config(
             double mt1MaxDistance,
             double xyStdDevCoeffMT1,
             double thetaStdDevCoeffMT1,
             double xyStdDevCoeffMT2) {}
 
-    public static record Update(Pose2d pose, double timestamp, Matrix<N3, N1> stdDevs) {}
+    public record Update(Pose2d pose, double timestamp, Matrix<N3, N1> stdDevs) {}
 
-    private static record PoseEstimate(Pose2d pose, double timestamp, int tagCount, double avgTagDist) {
-        public void log(String prefix) {
-            Logger.recordOutput(prefix + "/Pose", pose);
-            Logger.recordOutput(prefix + "/Timestamp", timestamp);
-            Logger.recordOutput(prefix + "/Tag Count", tagCount);
-            Logger.recordOutput(prefix + "/Average Tag Dist", avgTagDist);
-        }
-    }
+    private record PoseEstimate(Pose2d pose, double timestamp, int tagCount, double avgTagDist) {}
 
     private final String name;
     private final Config config;
@@ -60,14 +52,9 @@ public final class LimelightCamera {
 
     public void getNewUpdates(List<Update> updatesOut, boolean useMegaTag2) {
         io.updateInputs(inputs);
-        Logger.processInputs("Limelight/" + name, inputs);
 
         PoseEstimate mt1 = decodeEstimate(inputs.megaTag1);
         PoseEstimate mt2 = decodeEstimate(inputs.megaTag2);
-        if (mt1 != null)
-            mt1.log("Limelight/" + name + "/MegaTag 1");
-        if (mt2 != null)
-            mt2.log("Limelight/" + name + "/MegaTag 2");
 
         processEstimate(updatesOut, mt1, mt2, useMegaTag2);
     }

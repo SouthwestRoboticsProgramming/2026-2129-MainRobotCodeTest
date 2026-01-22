@@ -1,32 +1,29 @@
 package com.swrobotics.robot;
 
 import com.swrobotics.lib.net.NTEntry;
-import com.swrobotics.robot.logging.Logging;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.Threads;
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 
-import org.littletonrobotics.junction.LoggedRobot;
-import org.littletonrobotics.junction.Logger;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * The main robot class.
  */
-public final class Robot extends LoggedRobot {
+public final class Robot extends TimedRobot {
+    private static final Queue<Runnable> mainThreadOperations = new ConcurrentLinkedQueue<>();
+
+    public static void runOnMainThread(Runnable runnable) {
+        mainThreadOperations.add(runnable);
+    }
+
     private Command autonomousCommand;
     private RobotContainer robotContainer;
 
     @Override
     public void robotInit() {
-        Logging.initialize(RobotContainer.SIM_MODE);
-        if (RobotBase.isSimulation() && RobotContainer.SIM_MODE == Logging.SimMode.REPLAY) {
-            setUseTiming(RobotContainer.REPLAY_REAL_TIME);
-        }
-
         // Create a RobotContainer to manage our subsystems and our buttons
         robotContainer = new RobotContainer();
     }
@@ -34,9 +31,12 @@ public final class Robot extends LoggedRobot {
     @Override
     public void robotPeriodic() {
         Threads.setCurrentThreadPriority(true, 99);
-
-        NTEntry.updateAll();
         CommandScheduler.getInstance().run(); // Leave this alone
+
+        Runnable r;
+        while ((r = mainThreadOperations.poll()) != null) {
+            r.run();
+        }
     }
 
     @Override
@@ -64,7 +64,6 @@ public final class Robot extends LoggedRobot {
         // Log whether auto was cancelled
         autonomousCommand = autonomousCommand
                 .finallyDo((cancelled) -> {
-                    Logger.recordOutput("Auto/Command Cancelled", cancelled);
                     if (cancelled)
                         DriverStation.reportWarning("Auto command ended early", false);
                 });
@@ -81,7 +80,6 @@ public final class Robot extends LoggedRobot {
                 .finallyDo(() -> {
                     double endTimestamp = Timer.getTimestamp();
 
-                    Logger.recordOutput("Auto/Command Time", endTimestamp - startTimestamp);
                     System.out.println("Auto command took " + (endTimestamp - startTimestamp) + " seconds");
                 });
 

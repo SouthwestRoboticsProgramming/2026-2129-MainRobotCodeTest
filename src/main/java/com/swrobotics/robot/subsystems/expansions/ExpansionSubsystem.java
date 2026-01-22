@@ -1,7 +1,5 @@
 package com.swrobotics.robot.subsystems.expansions;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -66,10 +64,6 @@ public class ExpansionSubsystem extends SubsystemBase {
                 targetRotations = Constants.kExpansionRetractedRotations.get();
                 break;
         }
-
-        Logger.recordOutput("Expansion/TargetState", targetState.toString());
-        Logger.recordOutput("Expansion/TargetRotations", targetRotations);
-        Logger.recordOutput("Expansion/PositionRotations", motor.getPosition().getValueAsDouble());
 
         motor.setControl(m_motionMagic.withPosition(targetRotations));
     }

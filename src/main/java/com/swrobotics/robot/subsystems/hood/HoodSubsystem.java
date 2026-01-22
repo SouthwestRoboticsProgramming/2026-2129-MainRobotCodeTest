@@ -1,7 +1,5 @@
 package com.swrobotics.robot.subsystems.hood;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -67,10 +65,6 @@ public class HoodSubsystem extends SubsystemBase {
                 targetRotations = Constants.kHoodReadyRotations.get();
                 break;
         }
-
-        Logger.recordOutput("Hood/TargetState", targetState.toString());
-        Logger.recordOutput("Hood/TargetRotations", targetRotations);
-        Logger.recordOutput("Hood/PositionRotations", motor.getPosition().getValueAsDouble());
 
         motor.setControl(m_motionMagic.withPosition(targetRotations));
     }

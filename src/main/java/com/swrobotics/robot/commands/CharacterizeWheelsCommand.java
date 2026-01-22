@@ -7,8 +7,8 @@ import com.swrobotics.robot.subsystems.swerve.SwerveDriveSubsystem;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import org.littletonrobotics.junction.Logger;
 
 /**
  * Command to measure the effective wheel radius on the field carpet.
@@ -59,7 +59,7 @@ public final class CharacterizeWheelsCommand extends Command {
         // Report result as warning so it shows up in the driver station
         DriverStation.reportWarning("Corrected wheel radius: " + correctedRadius, false);
 
-        // Also log to AdvantageKit in case we miss the message
-        Logger.recordOutput("Drive/Corrected wheel radius", correctedRadius);
+        // Also log to NetworkTables in case we miss the message
+        SmartDashboard.putNumber("Drive/Corrected wheel radius", correctedRadius);
     }
 }
