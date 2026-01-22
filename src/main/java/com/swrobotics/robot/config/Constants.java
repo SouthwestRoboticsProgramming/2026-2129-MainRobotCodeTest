@@ -31,7 +31,7 @@ public final class Constants {
     public static final int kPeriodicFreq = 50; // Hz
     public static final double kPeriodicTime = 1.0 / kPeriodicFreq;
 
-    public static final FieldInfo kField = FieldInfo.REEFSCAPE_2025;
+    public static final FieldInfo kField = FieldInfo.REBUILT_2026;
     public static final int kEndgameAlertTime = 20;
     public static final int kEndgameAlert2Time = 5;
     public static final int kTransferAlertTime = 130;//TODO: Set transfer alert time later
