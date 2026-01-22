@@ -1,5 +1,11 @@
 package com.swrobotics.robot.subsystems.swerve;
 
+import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.MagnetSensorConfigs;
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.*;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
@@ -7,9 +13,11 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.swrobotics.lib.field.FieldInfo;
 import com.swrobotics.lib.net.NTBoolean;
+import com.swrobotics.lib.net.NTEntry;
 import com.swrobotics.robot.config.Constants;
 import com.swrobotics.robot.logging.FieldView;
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -18,6 +26,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -25,15 +34,60 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public final class SwerveDriveSubsystem extends SubsystemBase {
     private static final NTBoolean CALIBRATE = new NTBoolean("Drive/Modules/Calibrate", false);
 
-    private final SwerveIO io;
-    private final SwerveIO.Inputs inputs;
+    private final SwerveDrivetrain<TalonFX, TalonFX, CANcoder> drivetrain;
+    private final StatusSignal<Angle> rawGyroAngleSignal;
+
+    private SwerveDrivetrain.SwerveDriveState currentState;
+    private Rotation2d rawGyroRotation;
+
 
     public SwerveDriveSubsystem() {
-        if (RobotBase.isReal())
-            io = new CtreSwerveIO();
-        else
-            io = new SimSwerveIO();
-        inputs = new SwerveIO.Inputs();
+        int kModuleCount = Constants.kSwerveModuleInfos.length;
+        var moduleConstants = new SwerveModuleConstants[kModuleCount];
+        for (int i = 0; i < kModuleCount; i++) {
+            SwerveModuleInfo info = Constants.kSwerveModuleInfos[i];
+            moduleConstants[i] = Constants.kModuleConstantsFactory.createModuleConstants(
+                info.turnId(),
+                info.driveId(),
+                info.encoderId(),
+                info.offset().get(),
+                info.position().getX(),
+                info.position().getY(),
+                false,
+                true,
+                false
+            );
+        }
+
+        drivetrain = new SwerveDrivetrain<>(
+            TalonFX::new, TalonFX::new, CANcoder::new,
+            Constants.kDrivetrainConstants,
+            Constants.kOdometryUpdateFreq,
+            Constants.kOdometryStdDevs,
+            // These values have no effect, they are overridden by the
+            // standard deviations given to drivetrain.addVisionMeasurement()
+            VecBuilder.fill(0.6, 0.6, 0.6),
+            moduleConstants
+        );
+
+        for (int i = 0; i < kModuleCount; i++) {
+            SwerveModule<TalonFX, TalonFX, CANcoder> module = drivetrain.getModule(i);
+
+            CurrentLimitsConfigs driveLimits = new CurrentLimitsConfigs()
+                .withStatorCurrentLimit(Constants.kDriveStatorCurrentLimit)
+                .withSupplyCurrentLowerLimit(Constants.kDriveSupplyCurrentLimit)
+                .withSupplyCurrentLowerTime(Constants.kDriveCurrentLimitTime);
+            module.getDriveMotor().getConfigurator().apply(driveLimits);
+        }
+
+        // Set operator perspective to field +X axis (0 degrees) so coordinate
+        // system stays centered on blue alliance origin
+        drivetrain.setOperatorPerspectiveForward(new Rotation2d(0));
+
+        rawGyroAngleSignal = drivetrain.getPigeon2().getYaw();
+
+        currentState = drivetrain.getState();
+        rawGyroRotation = Rotation2d.fromDegrees(rawGyroAngleSignal.refresh().getValueAsDouble());
 
         AutoBuilder.configure(
                 this::getEstimatedPose,
@@ -71,19 +125,19 @@ public final class SwerveDriveSubsystem extends SubsystemBase {
     }
 
     public void setControl(SwerveRequest request) {
-        io.setControl(request);
+        drivetrain.setControl(request);
     }
 
     public ChassisSpeeds getRobotRelativeSpeeds() {
-        return inputs.robotRelSpeeds;
+        return currentState.Speeds;
     }
 
     public SwerveModulePosition[] getModulePositions() {
-        return inputs.modulePositions;
+        return currentState.ModulePositions;
     }
 
     public Pose2d getEstimatedPose() {
-        return inputs.estPose;
+        return currentState.Pose;
     }
 
     public boolean isCloseTo(Translation2d position, double tolerance) {
@@ -92,24 +146,24 @@ public final class SwerveDriveSubsystem extends SubsystemBase {
     }
 
     public void resetRotation(Rotation2d robotRotation) {
-        io.resetRotation(robotRotation);
+        drivetrain.resetRotation(robotRotation);
     }
 
     public void resetPose(Pose2d robotPose) {
-        io.resetPose(robotPose);
+        drivetrain.resetPose(robotPose);
     }
 
     public void addVisionMeasurement(Pose2d robotPose, double timestamp, Matrix<N3, N1> stdDevs) {
-        io.addVisionMeasurement(robotPose, timestamp, stdDevs);
+        drivetrain.addVisionMeasurement(robotPose, Utils.fpgaToCurrentTime(timestamp), stdDevs);
     }
 
     public Rotation2d getRawGyroRotation() {
-        return inputs.rawGyroRotation;
+        return rawGyroRotation;
     }
 
     public double getFFCharacterizationVelocity() {
         double avgVelocity = 0;
-        for (SwerveModuleState state : inputs.moduleStates) {
+        for (SwerveModuleState state : currentState.ModuleStates) {
             avgVelocity += Math.abs(state.speedMetersPerSecond);
         }
         avgVelocity /= 4;
@@ -118,18 +172,38 @@ public final class SwerveDriveSubsystem extends SubsystemBase {
     }
 
     public Translation2d fieldToRobotRelative(Translation2d fieldRel) {
-        return fieldRel.rotateBy(inputs.estPose.getRotation().unaryMinus());
+        return fieldRel.rotateBy(currentState.Pose.getRotation().unaryMinus());
+    }
+
+    private void calibrateModuleOffsets() {
+        SwerveModule<TalonFX, TalonFX, CANcoder>[] modules = drivetrain.getModules();
+        for (int i = 0; i < modules.length; i++) {
+            CANcoder canCoder = modules[i].getEncoder();
+            NTEntry<Double> offset = Constants.kSwerveModuleInfos[i].offset();
+
+            StatusSignal<Angle> canCoderPos = canCoder.getAbsolutePosition();
+            canCoderPos.waitForUpdate(1);
+            double position = canCoderPos.getValueAsDouble();
+
+            offset.set(offset.get() - position);
+            canCoder.getConfigurator().apply(new MagnetSensorConfigs().withMagnetOffset(offset.get()));
+        }
     }
 
     @Override
     public void periodic() {
-        io.updateInputs(inputs);
+        if (RobotBase.isSimulation()) {
+            drivetrain.updateSimState(Constants.kPeriodicTime, 12.0);
+        }
 
-        FieldView.robotPose.setPose(inputs.estPose);
+        currentState = drivetrain.getState();
+        rawGyroRotation = Rotation2d.fromDegrees(rawGyroAngleSignal.refresh().getValueAsDouble());
+
+        FieldView.robotPose.setPose(currentState.Pose);
 
         if (CALIBRATE.get()) {
             CALIBRATE.set(false);
-            io.calibrateModuleOffsets();
+            calibrateModuleOffsets();
         }
     }
 }
