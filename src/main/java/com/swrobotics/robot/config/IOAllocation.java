@@ -31,8 +31,6 @@ public final class IOAllocation {
 
     public static final class RIO {
         public static final int kPWM_LEDs = 0;
-
-        public static final int kDIO_IndexerBeamBreak = 0;
     }
 
     /** IDs of the devices within one swerve module */

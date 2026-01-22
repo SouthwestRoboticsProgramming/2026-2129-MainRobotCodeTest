@@ -11,7 +11,7 @@ import java.util.List;
  * Fun LED animation that shows pride flags while the robot is disabled.
  */
 public final class PrideSequencer {
-    private static final record Flag(Stripe[] stripes, int weight) {}
+    private record Flag(Stripe[] stripes, int weight) {}
 
     /**
      * Flag pattern definitions.

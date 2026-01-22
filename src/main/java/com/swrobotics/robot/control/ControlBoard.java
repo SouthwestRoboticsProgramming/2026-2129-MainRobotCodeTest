@@ -172,7 +172,10 @@ public final class ControlBoard extends SubsystemBase {
    
     }
 
-    private Translation2d getDesiredDriveTranslation() {
+    /**
+     * @return translation input for the drive base, in meters/sec
+     */
+    private Translation2d getDriveTranslation() {
         double maxSpeed = Constants.kDriveMaxAchievableSpeed;
 
         Translation2d leftStick = driver.getLeftStick();
@@ -191,16 +194,9 @@ public final class ControlBoard extends SubsystemBase {
         double targetSpeed = powerMag * maxSpeed;
         double filteredSpeed = driveControlFilter.calculate(targetSpeed);
         return new Translation2d(-leftStick.getY(), -leftStick.getX())
-                .div(rawMag) // Normalize translation
-                .times(filteredSpeed) // Apply new speed
-                .rotateBy(FieldInfo.getAllianceForwardAngle()); // Account for driver's perspective
-    }
-
-    /**
-     * @return translation input for the drive base, in meters/sec
-     */
-    private Translation2d getDriveTranslation() {
-        return getDesiredDriveTranslation();
+            .div(rawMag) // Normalize translation
+            .times(filteredSpeed) // Apply new speed
+            .rotateBy(FieldInfo.getAllianceForwardAngle()); // Account for driver's perspective
     }
 
     /**

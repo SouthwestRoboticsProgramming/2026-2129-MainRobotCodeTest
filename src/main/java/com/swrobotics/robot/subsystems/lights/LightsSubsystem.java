@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public final class LightsSubsystem extends SubsystemBase {
     private static final double kBrightness = 0.7;
 
-    private final RobotContainer robot;
     private final AddressableLED leds;
     private final AddressableLEDBuffer data;
 
@@ -24,8 +23,7 @@ public final class LightsSubsystem extends SubsystemBase {
     private Color commandRequest = null;
     private boolean fullBright = false;
 
-    public LightsSubsystem(RobotContainer robot) {
-        this.robot = robot;
+    public LightsSubsystem() {
         leds = new AddressableLED(IOAllocation.RIO.kPWM_LEDs);
         leds.setLength(Constants.kLedStripLength);
 
@@ -38,25 +36,9 @@ public final class LightsSubsystem extends SubsystemBase {
         prideSequencer = new PrideSequencer();
     }
 
-    private void showOverheating() {
-        // Flashing red lights
-        applySolid(Timer.getTimestamp() % 0.4 > 0.2 ? Color.kRed : Color.kBlack);
-    }
-
     private void showLowBattery() {
         // Flashing orange lights
         applySolid(Timer.getTimestamp() % 0.4 > 0.2 ? Color.kOrange : Color.kBlack);
-    }
-
-    private void showAutoDriving() {
-        // Rainbow
-        applyStripes(5f,
-                new Stripe(Color.kRed, 1),
-                new Stripe(Color.kOrange, 1),
-                new Stripe(Color.kYellow, 1),
-                new Stripe(Color.kGreen, 1),
-                new Stripe(Color.kBlue, 1),
-                new Stripe(Color.kPurple, 1));
     }
 
     private void showIdle() {

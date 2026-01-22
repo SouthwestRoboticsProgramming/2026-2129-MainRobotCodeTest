@@ -6,7 +6,6 @@ import com.swrobotics.robot.subsystems.swerve.SwerveDriveSubsystem;
 import com.swrobotics.robot.subsystems.vision.limelight.LimelightCamera;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -25,19 +24,7 @@ public final class VisionSubsystem extends SubsystemBase {
         this.drive = drive;
 
         cameras = List.of(
-                new LimelightCamera(
-                        "limelight-ftleft",
-                        Constants.kLimelightFrontLeftLocation,
-                        Constants.kLimelightConfig),
-                new LimelightCamera(
-                        "limelight-ftright",
-                        Constants.kLimelightFrontRightLocation,
-                        Constants.kLimelightConfig),
-                new LimelightCamera(
-                        "limelight-back",
-                        Constants.kLimelightBackLocation,
-                        Constants.kLimelightConfig)
-                // Add more cameras here...
+                // Add limelight cameras here...
         );
 
         ignoreUpdates = false;

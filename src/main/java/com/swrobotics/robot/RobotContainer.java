@@ -67,7 +67,7 @@ public class RobotContainer {
         hood = new HoodSubsystem();
         expansion = new ExpansionSubsystem();
 
-        lights = new LightsSubsystem(this);
+        lights = new LightsSubsystem();
 
         // ControlBoard must be initialized last
         controlboard = new ControlBoard(this);

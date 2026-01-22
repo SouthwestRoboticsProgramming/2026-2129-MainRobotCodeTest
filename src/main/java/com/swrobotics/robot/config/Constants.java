@@ -10,9 +10,6 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants.ClosedLoopOutputType;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerFeedbackType;
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.RobotConfig;
-import com.swrobotics.lib.ctre.NTMotionMagicConfigs;
-import com.swrobotics.lib.ctre.NTSlot0Configs;
-import com.swrobotics.lib.ctre.NTSlot1Configs;
 import com.swrobotics.lib.field.FieldInfo;
 import com.swrobotics.lib.net.NTDouble;
 import com.swrobotics.lib.net.NTEntry;
@@ -51,17 +48,10 @@ public final class Constants {
     public static final double kFrameLength = Units.inchesToMeters(27); // m
     public static final double kFrameWidth = Units.inchesToMeters(27); // m
 
-    public static final double kBumperThickness = Units.inchesToMeters(3); // FIXME
-    public static final double kRobotLength = kFrameLength + kBumperThickness * 2;
-    public static final double kRobotWidth = kFrameWidth + kBumperThickness * 2;
-    public static final double kRobotRadius = Math.hypot(kRobotLength / 2, kRobotWidth / 2);
     public static final double kRobotMass = Units.lbsToKilograms(135); // TODO: Measure
     // Approximation of robot as uniform cuboid
     // See https://sleipnirgroup.github.io/Choreo/usage/estimating-moi/
-    // FIXME: Measure in CAD
     public static final double kRobotMOI = 1.0/12.0 * kRobotMass * (kFrameLength*kFrameLength + kFrameWidth*kFrameWidth);
-    public static final double kCOGHeightWithArmDown = Units.inchesToMeters(10); // TODO: Measure
-    public static final double kCOGHeightWithArmUp = Units.inchesToMeters(23.126); // TODO: Measure
 
     // Controls
     public static final int kDriverControllerPort = 0;
@@ -81,19 +71,6 @@ public final class Constants {
     public static final NTEntry<Double> kAutoTurnKp = new NTDouble("Drive/Auto/Turn PID/kP", 5).setPersistent();
     public static final NTEntry<Double> kAutoTurnKd = new NTDouble("Drive/Auto/Turn PID/kD", 0).setPersistent();
 
-    public static final double kAutoMaxDriveSpeed = 4;//Units.feetToMeters(18);
-    public static final double kAutoMaxDriveAccel = 3;//5;
-    public static final double kAutoMaxTurnSpeed = 1.25;
-    public static final double kAutoMaxTurnAccel = 2;
-
-    public static final double kAutoSwitchToSnapDist = 0.2;
-    public static final NTEntry<Double> kAutoScoreXYTolerance = new NTDouble("Drive/Auto/Score XY Tolerance (m)", 0.05).setPersistent();
-    public static final NTEntry<Double> kAutoScoreAngleTolerance = new NTDouble("Drive/Auto/Score Angle Tolerance (deg)", 0.6).setPersistent();
-    public static final double kAutoToleranceTimeout = 0.8;
-    public static final double kAutoCoralEjectTime = 0.3;
-    public static final double kAutoElevatorDownDelay = 0.5;
-
-    public static final NTEntry<Double> kSnapOffset = new NTDouble("Drive/Snap/Offset (m)", 0.0).setPersistent();
     public static final NTEntry<Double> kSnapMaxSpeed = new NTDouble("Drive/Snap/Max Speed (meters per sec)", 1.5).setPersistent();
     public static final NTEntry<Double> kSnapMaxTurnSpeed = new NTDouble("Drive/Snap/Max Turn Speed (rot per sec)", 1.2).setPersistent();
     public static final NTEntry<Double> kSnapDriveKp = new NTDouble("Drive/Snap/Drive kP", 5).setPersistent();
@@ -105,9 +82,6 @@ public final class Constants {
 
     // Drive
     public static final double kDriveMaxAchievableSpeed = Units.feetToMeters(18.9); // m/s  TODO: Measure
-
-    // Subtracted from calculated max acceleration to get tipping acceleration limit
-    public static final double kDriveTippingAccelTolerance = 1; // m/s^2
 
     public static final double kOdometryUpdateFreq = 200; // Hz
     public static final Matrix<N3, N1> kOdometryStdDevs = VecBuilder.fill(0.005, 0.005, 0.001);
@@ -142,10 +116,9 @@ public final class Constants {
                     .withDriveMotorGearRatio((50.0/16) * (16.0/28) * (45.0/15))
                     .withSteerMotorGearRatio(150.0 / 7)
                     .withCouplingGearRatio(50.0 / 16)
-                    .withWheelRadius(Meters.of(0.0485603333))//0.048218 ))
+                    .withWheelRadius(Meters.of(0.0485603333))
                     .withSteerMotorGains(new Slot0Configs().withKP(50).withKD(0.01).withKV(0.1))
                     .withDriveMotorGains(new Slot0Configs().withKP(0.35).withKD(0).withKV(0.012621).withKS(0.22109))
-//                    .withDriveMotorGains(new Slot0Configs().withKP(0.4).withKD(0).withKV(0.012621 * 17.675293 / 13.515625 * 17.675293 / 2.136719 * 19.378906 / 17.676758 * 17.675293 / 21.419922).withKS(0.22109))
                     .withSteerMotorClosedLoopOutput(ClosedLoopOutputType.Voltage)
                     .withDriveMotorClosedLoopOutput(ClosedLoopOutputType.Voltage)
                     .withSlipCurrent(Amps.of(80))
@@ -179,32 +152,8 @@ public final class Constants {
             kSwerveModuleInfos[3].position()
     );
 
-    // Pathfinding
-    public static final String kPathfindingJson = "reefscape_pathfinding.json";
-    public static final double kPathfindingTolerance = 0.2; // m
-
     // Vision
     public static final double kVisionMT2SpeedThreshold = 0.2; // m/s
-
-    public static final LimelightCamera.MountingLocation kLimelightFrontLeftLocation = new LimelightCamera.MountingLocation(
-            kFrameLength / 2 - Units.inchesToMeters(4.5),
-            -kFrameWidth / 2 + Units.inchesToMeters(3.25),
-            Units.inchesToMeters(9.059),
-            // Degrees CCW
-            0, 20.6, -33
-    );
-    public static final LimelightCamera.MountingLocation kLimelightFrontRightLocation = new LimelightCamera.MountingLocation(
-            kFrameLength / 2 - Units.inchesToMeters(4.5),
-            kFrameWidth / 2 - Units.inchesToMeters(3.25),
-            Units.inchesToMeters(9.059),
-            // Degrees CCW
-            0, 20.6, 33
-    );
-    public static final LimelightCamera.MountingLocation kLimelightBackLocation = new LimelightCamera.MountingLocation(
-            // TODO: These are guesses, they should be measured in CAD
-            0, 0, 0.972,
-            0, 35, 180
-    );
 
     // This will be different for each lens type, cameras with same lens should
     // have the same config
@@ -244,9 +193,6 @@ public final class Constants {
     /* --- Lights --- */
     public static final int kLedStripLength = 51;
     public static final int kLowBatteryThreshold = 10; // Volts
-
-    /* --- Motor Tracking --- */
-    public static final double kOverheatingThreshold = 75; // Celsius
 
     /* --- Shooter --- */
     public static final NTEntry<Double> kShooterRPS = new NTDouble("Shooter/Intake RPS", 100.0).setPersistent();
