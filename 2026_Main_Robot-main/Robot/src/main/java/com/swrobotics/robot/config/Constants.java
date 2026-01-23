@@ -215,6 +215,23 @@ public final class Constants {
             0.002,
             0.00117
     );
+    /* --- Autoalign command v1 --- */
+
+/* --- Arc Align --- */
+public static final NTEntry<Double> kArcAlignRadius = new NTDouble("Drive/ArcAlign/Radius (m)", 1.0).setPersistent();
+public static final NTEntry<Double> kArcAlignAngleOffset = new NTDouble("Drive/ArcAlign/Angle Offset (deg)", 0.0).setPersistent();
+public static final NTEntry<Double> kArcAlignMaxSpeed = new NTDouble("Drive/ArcAlign/Max Speed (m/s)", 1.5).setPersistent();
+public static final NTEntry<Double> kArcAlignMaxTurnSpeed = new NTDouble("Drive/ArcAlign/Max Turn Speed (rot/s)", 1.2).setPersistent();
+public static final NTEntry<Double> kArcAlignDriveKp = new NTDouble("Drive/ArcAlign/Drive kP", 5.0).setPersistent();
+public static final NTEntry<Double> kArcAlignDriveKd = new NTDouble("Drive/ArcAlign/Drive kD", 0.0).setPersistent();
+public static final NTEntry<Double> kArcAlignTurnKp = new NTDouble("Drive/ArcAlign/Turn kP", 8.0).setPersistent();
+public static final NTEntry<Double> kArcAlignTurnKd = new NTDouble("Drive/ArcAlign/Turn kD", 0.0).setPersistent();
+public static final NTEntry<Double> kArcAlignXYDeadzone = new NTDouble("Drive/ArcAlign/XY Deadzone (m)", 0.001).setPersistent();
+public static final NTEntry<Double> kArcAlignThetaDeadzone = new NTDouble("Drive/ArcAlign/Theta Deadzone (deg)", 0.5).setPersistent();
+public static final NTEntry<Double> kArcAlignEngageDistance = new NTDouble("Drive/ArcAlign/Engage Distance (m)", 3.0).setPersistent();
+
+
+
 
    /* --- Hood --- */ //TODO: Adjust constant values
     public static final NTEntry<Double> kHoodIdleRotations = new NTDouble("Hood/Target Rotations", 0.0).setPersistent();

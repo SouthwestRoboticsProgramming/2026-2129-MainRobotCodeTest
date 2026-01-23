@@ -141,6 +141,103 @@ public final class DriveCommands {
                 .raceWith(LightCommands.showSnappingToPose(lights));
     }
 
+    // Updated DriveCommands.java - EXACT snapToPose clone with arc logic:
+public static Command autoalignArcToHub(SwerveDriveSubsystem drive, LightsSubsystem lights) {
+    PIDController driveXPid = new PIDController(0, 0, 0);
+    PIDController driveYPid = new PIDController(0, 0, 0);
+    PIDController turnPid = new PIDController(0, 0, 0);
+    turnPid.enableContinuousInput(-Math.PI, Math.PI);
+
+    Pose2d hubPose = new Pose2d(8.013, 7.937, new Rotation2d()); // 2026 Red Hub
+
+    return Commands.startRun(() -> {
+        // IDENTICAL snapToPose PID setup
+        driveXPid.setPID(Constants.kArcAlignDriveKp.get(), 0, Constants.kArcAlignDriveKd.get());
+        driveYPid.setPID(Constants.kArcAlignDriveKp.get(), 0, Constants.kArcAlignDriveKd.get());
+        turnPid.setPID(Constants.kArcAlignTurnKp.get(), 0, Constants.kArcAlignTurnKd.get());
+
+        driveXPid.reset(); driveYPid.reset(); turnPid.reset();
+    }, () -> {
+        Pose2d currentPose = drive.getEstimatedPose();
+        
+        // **ENGAGE DISTANCE CHECK** - Only run when close enough to hub
+        Translation2d toHub = hubPose.getTranslation().minus(currentPose.getTranslation());
+        double distanceToHub = toHub.getNorm();
+        
+        if (distanceToHub > Constants.kArcAlignEngageDistance.get()) {
+            // Too far - stop
+            drive.setControl(new SwerveRequest.FieldCentric()
+                .withVelocityX(0).withVelocityY(0).withRotationalRate(0));
+            return;
+        }
+        
+        // **ARC SEGMENT MATH** - Find closest point on π radian arc
+        double radius = Constants.kArcAlignRadius.get();
+        double angleOffsetDeg = Constants.kArcAlignAngleOffset.get();
+        double angleOffsetRad = Math.toRadians(angleOffsetDeg);
+        
+        // Robot's approach angle defines arc center
+        double robotAngle = Math.atan2(toHub.getY(), toHub.getX());
+        
+        // Limit to π/x radians total arc 
+        double arcHalfAngle = Math.toRadians(80);
+        double minAngle = robotAngle - arcHalfAngle + angleOffsetRad;
+        double maxAngle = robotAngle + arcHalfAngle + angleOffsetRad;
+        
+        // Clamp to arc segment (nearest valid point)
+        double targetAngle = MathUtil.clamp(robotAngle + angleOffsetRad, minAngle, maxAngle);
+        
+        // Target position on arc
+        Translation2d targetPos = new Translation2d(
+            hubPose.getX() + radius * Math.cos(targetAngle),
+            hubPose.getY() + radius * Math.sin(targetAngle)
+        );
+        
+        // Always face hub center
+        Translation2d toHubFromTarget = hubPose.getTranslation().minus(targetPos);
+        Rotation2d targetRot = toHubFromTarget.getAngle();
+
+        
+        // **IDENTICAL snapToPose logic from here ↓**
+        double xyError = currentPose.getTranslation().getDistance(targetPos);
+        double thetaError = MathUtil.absDiffRad(
+            currentPose.getRotation().getRadians(), targetRot.getRadians()
+        );
+
+        double xOutput = 0, yOutput = 0;
+        if (xyError > Constants.kArcAlignXYDeadzone.get()) {
+            xOutput = driveXPid.calculate(currentPose.getX(), targetPos.getX());
+            yOutput = driveYPid.calculate(currentPose.getY(), targetPos.getY());
+        }
+        
+        double rotOutput = 0;
+        if (thetaError > Math.toRadians(Constants.kArcAlignThetaDeadzone.get())) {
+            rotOutput = turnPid.calculate(
+                MathUtil.wrap(currentPose.getRotation().getRadians(), -Math.PI, Math.PI),
+                MathUtil.wrap(targetRot.getRadians(), -Math.PI, Math.PI)
+            );
+        }
+
+        // IDENTICAL speed limiting
+        double maxDriveSpeed = Constants.kArcAlignMaxSpeed.get();
+        double driveSpeed = Math.hypot(xOutput, yOutput);
+        if (driveSpeed > maxDriveSpeed) {
+            double scale = maxDriveSpeed / driveSpeed;
+            xOutput *= scale; yOutput *= scale;
+        }
+
+        double maxTurnSpeed = Units.rotationsToRadians(Constants.kArcAlignMaxTurnSpeed.get());
+        rotOutput = MathUtil.clamp(rotOutput, -maxTurnSpeed, maxTurnSpeed);
+
+        drive.setControl(new SwerveRequest.FieldCentric()
+            .withVelocityX(xOutput)
+            .withVelocityY(yOutput)
+            .withRotationalRate(rotOutput));
+    }, drive)
+    .raceWith(LightCommands.showArcAligning(lights));
+}
+
+
     public static Command snapToPoseUntilInTolerance(
             SwerveDriveSubsystem drive,
             LightsSubsystem lights,
