@@ -11,6 +11,7 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerFeedbackType;
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.RobotConfig;
 import com.swrobotics.lib.field.FieldInfo;
+import com.swrobotics.lib.net.NTBoolean;
 import com.swrobotics.lib.net.NTDouble;
 import com.swrobotics.lib.net.NTEntry;
 import com.swrobotics.robot.subsystems.swerve.SwerveModuleInfo;
@@ -197,4 +198,14 @@ public final class Constants {
     /* --- Shooter --- */
     public static final NTEntry<Double> kShooterRPS = new NTDouble("Shooter/Intake RPS", 100.0).setPersistent();
     public static final NTEntry<Double> kShooterIdleRPS = new NTDouble("Shooter/Idle RPS", 0.0).setPersistent();
+
+    /* --- Turret --- */ //TODO: Adjust constant values
+    public static final NTEntry<Double> kTurretIdleRotations = new NTDouble("Turret/Idle Rotations", 0.0).setPersistent();
+    public static final NTEntry<Double> kTurretReadyRotations  = new NTDouble("Turret/Ready Rotations", 5.0).setPersistent();
+    public static final NTEntry<Double> kTurretCruiseVelocity = new NTDouble("Turret/Cruise Velocity", 30.0).setPersistent();
+    public static final NTEntry<Double> kTurretAcceleration  = new NTDouble("Turret/Acceleration", 90.0).setPersistent();
+    public static final NTEntry<Double> kTurretMaxAngle = new NTDouble("Turret/Max Angle (deg)", 180.0).setPersistent();
+    public static final NTEntry<Double> kTurretMinAngle = new NTDouble("Turret/Min Angle (deg)", -180.0).setPersistent();
+    public static final NTEntry<Double> kTurretTrackingDeadzone = new NTDouble("Turret/Tracking Deadzone (deg)", 2.0).setPersistent();
+    public static final NTEntry<Boolean> kTurretInverted = new NTBoolean("Turret/Inverted", false).setPersistent();
 }
