@@ -18,6 +18,8 @@ import com.swrobotics.robot.subsystems.swerve.SwerveModuleInfo;
 import com.swrobotics.robot.subsystems.vision.LimelightCamera;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -166,13 +168,19 @@ public final class Constants {
             0.00117
     );
 
-   /* --- Hood --- */ //TODO: Adjust constant values
-    public static final NTEntry<Double> kHoodIdleRotations = new NTDouble("Hood/Target Rotations", 0.0).setPersistent();
-    public static final NTEntry<Double> kHoodMovingRotations = new NTDouble("Hood/Retracted Rotations", 2.0).setPersistent();
-    public static final NTEntry<Double> kHoodReadyRotations  = new NTDouble("Hood/Extended Rotations", 0.0).setPersistent();
-    public static final NTEntry<Double> kHoodCruiseVelocity = new NTDouble("Hood/Cruise Velocity", 20.0).setPersistent();   
-    public static final NTEntry<Double> kHoodAcceleration  = new NTDouble("Hood/Acceleration", 80.0).setPersistent();
-
+   /* --- Hood --- */ //TODO: Adjust constant valuespublic static final NTEntry<Double> kTurretIdleRotations = new NTDouble("Turret/Idle Rotations", 0.0).setPersistent();
+    public static final NTEntry<Double> kHoodReadyRotations  = new NTDouble("Turret/Ready Rotations", 5.0).setPersistent();
+    public static final NTEntry<Double> kHoodCruiseVelocity = new NTDouble("Turret/Cruise Velocity", 30.0).setPersistent();
+    public static final NTEntry<Double> kHoodAcceleration  = new NTDouble("Turret/Acceleration", 90.0).setPersistent();
+    public static final NTEntry<Double> kHoodMaxAngle = new NTDouble("Turret/Max Angle (deg)", 60.0).setPersistent();
+    public static final NTEntry<Double> kHoodMinAngle = new NTDouble("Turret/Min Angle (deg)", 0).setPersistent();
+    public static final NTEntry<Double> kHoodTrackingDeadzone = new NTDouble("Turret/Tracking Deadzone (deg)", 2.0).setPersistent();
+    public static final NTEntry<Boolean> kHoodInverted = new NTBoolean("Turret/Inverted", false).setPersistent();
+    public static final Pose2d kHubPose = new Pose2d(8.25, 4.10, new Rotation2d());
+    public static final NTEntry<Double> kA0 = new NTDouble("Hood/A0", 20.0);
+    public static final NTEntry<Double> kA1 = new NTDouble("Hood/A1", -3.0);
+    public static final NTEntry<Double> kA2 = new NTDouble("Hood/A2", .25);
+    public static final NTEntry<Double> kA_Rps = new NTDouble("Hood/A0", .02);
 
     /* --- Climber ---  */ //TODO: Add climber constants here later
 
@@ -199,13 +207,5 @@ public final class Constants {
     public static final NTEntry<Double> kShooterRPS = new NTDouble("Shooter/Intake RPS", 100.0).setPersistent();
     public static final NTEntry<Double> kShooterIdleRPS = new NTDouble("Shooter/Idle RPS", 0.0).setPersistent();
 
-    /* --- Turret --- */ //TODO: Adjust constant values
-    public static final NTEntry<Double> kTurretIdleRotations = new NTDouble("Turret/Idle Rotations", 0.0).setPersistent();
-    public static final NTEntry<Double> kTurretReadyRotations  = new NTDouble("Turret/Ready Rotations", 5.0).setPersistent();
-    public static final NTEntry<Double> kTurretCruiseVelocity = new NTDouble("Turret/Cruise Velocity", 30.0).setPersistent();
-    public static final NTEntry<Double> kTurretAcceleration  = new NTDouble("Turret/Acceleration", 90.0).setPersistent();
-    public static final NTEntry<Double> kTurretMaxAngle = new NTDouble("Turret/Max Angle (deg)", 180.0).setPersistent();
-    public static final NTEntry<Double> kTurretMinAngle = new NTDouble("Turret/Min Angle (deg)", -180.0).setPersistent();
-    public static final NTEntry<Double> kTurretTrackingDeadzone = new NTDouble("Turret/Tracking Deadzone (deg)", 2.0).setPersistent();
-    public static final NTEntry<Boolean> kTurretInverted = new NTBoolean("Turret/Inverted", false).setPersistent();
+    
 }

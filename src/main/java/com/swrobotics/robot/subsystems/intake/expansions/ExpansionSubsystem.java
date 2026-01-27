@@ -1,4 +1,4 @@
-package com.swrobotics.robot.subsystems.hood;
+package com.swrobotics.robot.subsystems.intake.expansions;
 
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
@@ -6,25 +6,28 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.swrobotics.lib.ctre.TalonFXConfigHelper;
-import com.swrobotics.robot.config.Constants;
 import com.swrobotics.robot.config.IOAllocation;
+import com.swrobotics.robot.config.Constants;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class HoodSubsystem extends SubsystemBase {
-    enum State{
-        IDLE,
-        MOVING,
-        READY
+// ...
+
+public class ExpansionSubsystem extends SubsystemBase {
+
+    public enum State {
+        RETRACTED,
+        EXTENDED
     }
+
     private final TalonFX motor;
     private final MotionMagicVoltage m_motionMagic = new MotionMagicVoltage(0).withSlot(0);
     private State targetState;
 
-    public HoodSubsystem() {
-        motor = IOAllocation.CAN.kHoodMotor.createTalonFX();
+    public ExpansionSubsystem() {
+        motor = IOAllocation.CAN.kExpansionMotor.createTalonFX();
 
         TalonFXConfigHelper config = new TalonFXConfigHelper();
         config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
@@ -36,16 +39,16 @@ public class HoodSubsystem extends SubsystemBase {
         config.Slot0.kD = 0.001;
 
         // Motion Magic profile using constants
-        MotionMagicConfigs jerry2 = new MotionMagicConfigs();
-        jerry2.MotionMagicCruiseVelocity = Constants.kHoodCruiseVelocity.get();
-        jerry2.MotionMagicAcceleration   = Constants.kHoodCruiseVelocity.get();
-        config.MotionMagic = jerry2;
+        MotionMagicConfigs jerry = new MotionMagicConfigs();
+        jerry.MotionMagicCruiseVelocity = Constants.kExpansionCruiseVelocity.get();
+        jerry.MotionMagicAcceleration   = Constants.kExpansionAcceleration.get();
+        config.MotionMagic = jerry;
 
         config.apply(motor);
 
         motor.setPosition(0); // zero at startup
 
-        targetState = State.IDLE;
+        targetState = State.RETRACTED;
     }
 
         @Override
@@ -53,16 +56,12 @@ public class HoodSubsystem extends SubsystemBase {
         double targetRotations;
 
         switch (targetState) {
-            case IDLE:
+            case EXTENDED:
+                targetRotations = Constants.kExpansionExtendedRotations.get();
+                break;
+            case RETRACTED:
             default:
-                targetRotations = Constants.kHoodIdleRotations.get();
-                break;
-            case MOVING:
-                targetRotations = Constants.kHoodMovingRotations.get();
-            
-                break;
-            case READY:
-                targetRotations = Constants.kHoodReadyRotations.get();
+                targetRotations = Constants.kExpansionRetractedRotations.get();
                 break;
         }
 
@@ -76,5 +75,5 @@ public class HoodSubsystem extends SubsystemBase {
     public Command commandSetState(State targetState) {
         return Commands.run(() -> setTargetState(targetState), this);
     }
-    
 }
+
