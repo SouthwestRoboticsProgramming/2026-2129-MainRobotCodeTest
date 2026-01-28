@@ -65,6 +65,8 @@ public final class ControlBoard extends SubsystemBase {
         ));
 
         new Trigger(CHARACTERISE_WHEEL_RADIUS::get).whileTrue(new CharacterizeWheelsCommand(robot.drive));
+        
+        
         new Trigger(
             () ->
                     DriverStation.isTeleopEnabled()
@@ -157,8 +159,18 @@ public final class ControlBoard extends SubsystemBase {
                                 && DriverStation.getMatchTime() <= Constants.kEndgameAlert2Time)
                 .onTrue(RumblePatternCommands.endgameAlertFinalCountdown(driver, 0.75));
         
-        //TODO: add Intake/Indexer/Shooter/Expansion controls
+        //TODO: add Intake/Indexer/Shooter/Hood/Expansion controls
 
+        /* --- Intake --- */
+
+        /* --- Indexer --- */
+        
+        /* --- Shooter --- */
+
+        /* --- Hood --- */
+
+        /* --- Expansion --- */
+        
         //TODO: add Autoalign controls
 
         //TODO: add Climber controls

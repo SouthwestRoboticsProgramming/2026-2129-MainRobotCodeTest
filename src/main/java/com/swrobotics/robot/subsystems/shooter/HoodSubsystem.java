@@ -44,15 +44,15 @@ public class HoodSubsystem extends SubsystemBase {
                         : InvertedValue.Clockwise_Positive;
         config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-        // Hood-specific PID gains
+        // Hood-specific PID gains. we will need to tune these
         Slot0Configs gains = new Slot0Configs();
-        gains.withKP(12.0);
+        gains.withKP(6.0);
         gains.withKI(0.0);
         gains.withKD(0.8);
         gains.withKV(0.1);
         config.Slot0 = gains;
 
-        // Motion Magic configuration
+        // Motion Magic configuration for smooth movement
         MotionMagicConfigs mmConfig = new MotionMagicConfigs();
         mmConfig.MotionMagicCruiseVelocity = Constants.kHoodCruiseVelocity.get();
         mmConfig.MotionMagicAcceleration = Constants.kHoodAcceleration.get();
@@ -60,12 +60,12 @@ public class HoodSubsystem extends SubsystemBase {
         config.MotionMagic = mmConfig;
 
         config.apply(motor);
-        motor.setPosition(0); // Zero at origin
+        motor.setPosition(0); // Zero at origin but we should use cancoders to set an absolute position and not hope we are at 0 on boot
     }
 
     @Override
     public void periodic() {
-        // If your gearbox is not 1:1, replace conversion accordingly.
+        // assuming 1 to 1 gear ratio. will need to be changed if not
         currentHoodAngle = Math.toDegrees(motor.getPosition().getValueAsDouble());
 
         double maxAngle = Constants.kHoodMaxAngle.get();
@@ -78,7 +78,7 @@ public class HoodSubsystem extends SubsystemBase {
                 manualTargetRotations = 0.0; // Home to center
                 break;
 
-            case AUTO_TRACKING:
+            case AUTO_TRACKING://TODO: cameron put your auto hood code logic here.
                 // Auto compute hood angle from field-relative pose + shooter RPS
                 if (robotPose != null) {
                     Pose2d hubPose = Constants.kHubPose;

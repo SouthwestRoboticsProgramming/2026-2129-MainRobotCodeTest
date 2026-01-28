@@ -29,6 +29,7 @@ public class IndexerSubsystem extends SubsystemBase {
     }
     // Motor and control objects
     private final TalonFX motor;
+    private final TalonFX motor2;
     private final VelocityVoltage velocityControl = new VelocityVoltage(0);
     private State targetState;
     // Constructor
@@ -37,6 +38,7 @@ public class IndexerSubsystem extends SubsystemBase {
         // Initialize motor
 
         motor = IOAllocation.CAN.kIndexerMotor.createTalonFX();
+        motor2 = IOAllocation.CAN.kIndexerMotor2.createTalonFX();
 
         // Configure motor settings
 
@@ -57,7 +59,7 @@ public class IndexerSubsystem extends SubsystemBase {
 
         // Apply configuration to motor
 
-        config.apply(motor);
+        config.apply(motor, motor2);
 
         // Set initial target state which in this case is IDLE
 
@@ -78,6 +80,7 @@ public class IndexerSubsystem extends SubsystemBase {
 
         // Apply control
         motor.setControl(velocityControl.withVelocity(targetRPS));
+        motor2.setControl(velocityControl.withVelocity(targetRPS));
     }
 
     // Method to set the target state

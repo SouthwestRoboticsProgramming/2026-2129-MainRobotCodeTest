@@ -25,10 +25,11 @@ public final class IOAllocation {
 
         public static final CanId kShooterMotor = new CanId(14, kGerald);
         public static final CanId kIndexerMotor = new CanId(15, kGerald);
-        public static final CanId kIntakeMotor = new CanId(16, kGerald);
-        public static final CanId kExpansionMotor = new CanId(17, kGerald);
-        public static final CanId kHoodMotor = new CanId(18, kGerald);
-        public static final CanId kTurretMotor = new CanId(19, kGerald);
+        public static final CanId kIndexerMotor2 = new CanId(16, kGerald);
+        public static final CanId kIntakeMotor = new CanId(17, kGerald);
+        public static final CanId kExpansionMotor = new CanId(18, kGerald);
+        public static final CanId kHoodMotor = new CanId(19, kGerald);
+        public static final CanId kTurretMotor = new CanId(20, kGerald);
     }
 
     public static final class RIO {
